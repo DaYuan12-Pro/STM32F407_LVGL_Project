@@ -1,1 +1,17 @@
+# 编译输出目录
 build/
+Debug/
+Release/
+
+# 编译生成的中间文件
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.su
+
+# 日志文件
+*.log

@@ -1,56 +1,51 @@
+/**
+ ****************************************************************************************************
+ * @file        led.c
+ * @author      ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½Å¶ï¿½(ALIENTEK)
+ * @version     V1.0
+ * @date        2021-10-14
+ * @brief       LED ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @license     Copyright (c) 2020-2032, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿Æ¼ï¿½ï¿½ï¿½ï¿½Þ¹ï¿½Ë¾
+ ****************************************************************************************************
+ * @attention
+ *
+ * Êµï¿½ï¿½Æ½Ì¨:ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ Ì½ï¿½ï¿½ï¿½ï¿½ F407ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµ:www.yuanzige.com
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³:www.openedv.com
+ * ï¿½ï¿½Ë¾ï¿½ï¿½Ö·:www.alientek.com
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ö·:openedv.taobao.com
+ *
+ * ï¿½Þ¸ï¿½Ëµï¿½ï¿½
+ * V1.0 20211014
+ * ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½
+ *
+ ****************************************************************************************************
+ */
+ 
 #include "led.h"
-#include "sys.h"
 
-//³õÊ¼»¯GPIOº¯Êý
+
+/**
+ * @brief       ï¿½ï¿½Ê¼ï¿½ï¿½LEDï¿½ï¿½ï¿½IOï¿½ï¿½, ï¿½ï¿½Ê¹ï¿½ï¿½Ê±ï¿½ï¿½
+ * @param       ï¿½ï¿½
+ * @retval      ï¿½ï¿½
+ */
 void led_init(void)
 {
-    GPIO_InitTypeDef gpio_initstruct;
-    //´ò¿ªÊ±ÖÓ
-    __HAL_RCC_GPIOB_CLK_ENABLE();                           // Ê¹ÄÜGPIOBÊ±ÖÓ
+    GPIO_InitTypeDef gpio_init_struct;
     
-    //µ÷ÓÃGPIO³õÊ¼»¯º¯Êý
-    gpio_initstruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;          // Á½¸öLED¶ÔÓ¦µÄÒý½Å
-    gpio_initstruct.Mode = GPIO_MODE_OUTPUT_PP;             // ÍÆÍìÊä³ö
-    gpio_initstruct.Pull = GPIO_PULLUP;                     // ÉÏÀ­
-    gpio_initstruct.Speed = GPIO_SPEED_FREQ_HIGH;           // ¸ßËÙ
-    HAL_GPIO_Init(GPIOB, &gpio_initstruct);
-    //¹Ø±ÕLED
-    led1_off();
-    led2_off();
-}
+    LED0_GPIO_CLK_ENABLE();                                 /* LED0Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ */
+    LED1_GPIO_CLK_ENABLE();                                 /* LED1Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ */
 
-//µãÁÁLED1µÄº¯Êý
-void led1_on(void)
-{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);   // À­µÍLED1Òý½Å£¬µãÁÁLED1
-}
+    gpio_init_struct.Pin = LED0_GPIO_PIN;                   /* LED0ï¿½ï¿½ï¿½ï¿½ */
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;            /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    gpio_init_struct.Pull = GPIO_PULLUP;                    /* ï¿½ï¿½ï¿½ï¿½ */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          /* ï¿½ï¿½ï¿½ï¿½ */
+    HAL_GPIO_Init(LED0_GPIO_PORT, &gpio_init_struct);       /* ï¿½ï¿½Ê¼ï¿½ï¿½LED0ï¿½ï¿½ï¿½ï¿½ */
 
-//Ï¨ÃðLED1µÄº¯Êý
-void led1_off(void)
-{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);     // À­¸ßLED1Òý½Å£¬Ï¨ÃðLED1
-}
-
-//·­×ªLED1×´Ì¬µÄº¯Êý
-void led1_toggle(void)
-{
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-}
-
-//µãÁÁLED2µÄº¯Êý
-void led2_on(void)
-{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_RESET);   // À­µÍLED2Òý½Å£¬µãÁÁLED2
-}
-
-//Ï¨ÃðLED2µÄº¯Êý
-void led2_off(void)
-{
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);     // À­¸ßLED2Òý½Å£¬Ï¨ÃðLED2
-}
-
-//·­×ªLED2×´Ì¬µÄº¯Êý
-void led2_toggle(void)
-{
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_9);
+    gpio_init_struct.Pin = LED1_GPIO_PIN;                   /* LED1ï¿½ï¿½ï¿½ï¿½ */
+    HAL_GPIO_Init(LED1_GPIO_PORT, &gpio_init_struct);       /* ï¿½ï¿½Ê¼ï¿½ï¿½LED1ï¿½ï¿½ï¿½ï¿½ */
+    
+    LED0(1);                                                /* ï¿½Ø±ï¿½ LED0 */
+    LED1(1);                                                /* ï¿½Ø±ï¿½ LED1 */
 }

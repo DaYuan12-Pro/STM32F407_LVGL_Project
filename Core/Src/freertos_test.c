@@ -22,7 +22,6 @@ void task1(void *pvParams)
     debug_printf("Resume task2\r\n");
     while(1)
     {
-        led1_toggle();
         vTaskDelay(pdMS_TO_TICKS(150));
     }
 }
@@ -33,7 +32,6 @@ void task2(void *pvParams)
 
     while(1)
     {
-        led2_toggle();
         vTaskDelay(pdMS_TO_TICKS(300));
     }
 }
