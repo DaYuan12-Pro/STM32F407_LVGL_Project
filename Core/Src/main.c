@@ -26,6 +26,7 @@ int main(void)
 
     led_init();
 
+    //git练习，我增加了一行注释
     while (1)
     {
         LED1(1);
