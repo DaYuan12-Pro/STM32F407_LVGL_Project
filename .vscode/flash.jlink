@@ -1,0 +1,6 @@
+r
+h
+loadfile D:/STM32_Projects/STM32F407_LVGL_Project/build/STM32F407_LVGL_Project.elf
+r
+g
+exit

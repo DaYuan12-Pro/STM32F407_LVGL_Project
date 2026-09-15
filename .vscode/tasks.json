@@ -1,0 +1,51 @@
+{
+    "version": "2.0.0",
+
+    "tasks": [
+        {
+            "label": "Flash STM32",
+            "type": "shell",
+            "command": "C:\\Program Files\\SEGGER\\JLink_V976a\\JLink.exe",
+
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+
+            "args": [
+                "-device", "STM32F407ZG",
+                "-if", "SWD",
+                "-speed", "4000",
+                "-autoconnect", "1",
+                "-CommanderScript", "${workspaceFolder}\\.vscode\\flash.jlink"
+            ],
+
+            "problemMatcher": []
+        },
+
+        {
+            "label": "Flash STM32 (ST-Link)",
+            "type": "shell",
+            "command": "openocd",
+
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+
+            "args": [
+                "-f",
+                "interface/stlink.cfg",
+
+                "-c",
+                "transport select swd",
+
+                "-f",
+                "target/stm32f4x.cfg",
+
+                "-c",
+                "program build/STM32F407_LVGL_Project.elf verify reset exit"
+            ],
+
+            "problemMatcher": []
+        }
+    ]
+}
