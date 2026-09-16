@@ -210,7 +210,10 @@ uint8_t atk_md0430_touch_scan(atk_md0430_touch_point_t *point, uint8_t cnt)
     
     for (point_index=0; point_index<cnt; point_index++)
     {
-        if (&point[point_index] == NULL)
+        // if (&point[point_index] == NULL)
+        if ((point == NULL) ||
+            (cnt == 0) ||
+            (cnt > ATK_MD0430_TOUCH_TP_MAX))
         {
             return 0;
         }

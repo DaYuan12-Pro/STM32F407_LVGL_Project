@@ -58,6 +58,7 @@ MEMORY
 RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
 CCMRAM (xrw)      : ORIGIN = 0x10000000, LENGTH = 64K
 FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 1024K
+EXTSRAM (xrw) : ORIGIN = 0x68000000, LENGTH = 1M
 }
 
 /* Highest address of the user mode stack */
@@ -77,6 +78,24 @@ SECTIONS
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
+
+  .malloc_ccm (NOLOAD) :
+  {
+      . = ALIGN(64);
+      KEEP(*(.pool_ccm))
+      . = ALIGN(4);
+      KEEP(*(.map_ccm))
+      . = ALIGN(4);
+  } >CCMRAM
+  
+  .malloc_ext (NOLOAD) :
+  {
+      . = ALIGN(64);
+      KEEP(*(.pool_ext))
+      . = ALIGN(4);
+      KEEP(*(.map_ext))
+      . = ALIGN(4);
+  } >EXTSRAM
 
   /* The program code and other data goes into FLASH */
   .text :
