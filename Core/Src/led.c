@@ -1,51 +1,28 @@
-/**
- ****************************************************************************************************
- * @file        led.c
- * @author      ����ԭ���Ŷ�(ALIENTEK)
- * @version     V1.0
- * @date        2021-10-14
- * @brief       LED ��������
- * @license     Copyright (c) 2020-2032, �������������ӿƼ����޹�˾
- ****************************************************************************************************
- * @attention
- *
- * ʵ��ƽ̨:����ԭ�� ̽���� F407������
- * ������Ƶ:www.yuanzige.com
- * ������̳:www.openedv.com
- * ��˾��ַ:www.alientek.com
- * �����ַ:openedv.taobao.com
- *
- * �޸�˵��
- * V1.0 20211014
- * ��һ�η���
- *
- ****************************************************************************************************
- */
- 
 #include "led.h"
 
 
 /**
- * @brief       ��ʼ��LED���IO��, ��ʹ��ʱ��
- * @param       ��
- * @retval      ��
+ * @brief       初始化LED相关IO口, 并使能时钟
+ * @param       无
+ * @retval      无
  */
 void led_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct;
     
-    LED0_GPIO_CLK_ENABLE();                                 /* LED0ʱ��ʹ�� */
-    LED1_GPIO_CLK_ENABLE();                                 /* LED1ʱ��ʹ�� */
+    LED0_GPIO_CLK_ENABLE();                                 /* LED0时钟使能 */
+    LED1_GPIO_CLK_ENABLE();                                 /* LED1时钟使能 */
 
-    gpio_init_struct.Pin = LED0_GPIO_PIN;                   /* LED0���� */
-    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;            /* ������� */
-    gpio_init_struct.Pull = GPIO_PULLUP;                    /* ���� */
-    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          /* ���� */
-    HAL_GPIO_Init(LED0_GPIO_PORT, &gpio_init_struct);       /* ��ʼ��LED0���� */
+    gpio_init_struct.Pin = LED0_GPIO_PIN;                   /* LED0引脚 */
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;            /* 推挽输出 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                    /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          /* 高速 */
+    HAL_GPIO_Init(LED0_GPIO_PORT, &gpio_init_struct);       /* 初始化LED0引脚 */
 
-    gpio_init_struct.Pin = LED1_GPIO_PIN;                   /* LED1���� */
-    HAL_GPIO_Init(LED1_GPIO_PORT, &gpio_init_struct);       /* ��ʼ��LED1���� */
+    gpio_init_struct.Pin = LED1_GPIO_PIN;                   /* LED1引脚 */
+    HAL_GPIO_Init(LED1_GPIO_PORT, &gpio_init_struct);       /* 初始化LED1引脚 */
     
-    LED0(1);                                                /* �ر� LED0 */
-    LED1(1);                                                /* �ر� LED1 */
+    LED0(1);                                                /* 关闭 LED0 */
+    LED1(1);                                                /* 关闭 LED1 */
 }
+

@@ -1,62 +1,94 @@
 #include "key.h"
 #include "delay.h"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "freertos_test.h"
 
-// 初始化GPIO
+
+
+
+/**
+ * @brief       按键初始化函数
+ * @param       无
+ * @retval      无
+ */
 void key_init(void)
 {
-    GPIO_InitTypeDef gpio_initstruct;
+    GPIO_InitTypeDef gpio_init_struct;                          /* GPIO配置参数存储变量 */
+    KEY0_GPIO_CLK_ENABLE();                                     /* KEY0时钟使能 */
+    KEY1_GPIO_CLK_ENABLE();                                     /* KEY1时钟使能 */
+    KEY2_GPIO_CLK_ENABLE();                                     /* KEY2时钟使能 */
+    WKUP_GPIO_CLK_ENABLE();                                     /* WKUP时钟使能 */
 
-    // 使能GPIOA时钟
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    gpio_init_struct.Pin = KEY0_GPIO_PIN;                       /* KEY0引脚 */
+    gpio_init_struct.Mode = GPIO_MODE_INPUT;                    /* 输入 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                        /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;              /* 高速 */
+    HAL_GPIO_Init(KEY0_GPIO_PORT, &gpio_init_struct);           /* KEY0引脚模式设置,上拉输入 */
 
-    // 配置GPIO初始化参数
-    gpio_initstruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;          // 配置KEY对应的引脚
-    gpio_initstruct.Mode = GPIO_MODE_INPUT;                 // 输入模式
-    gpio_initstruct.Pull = GPIO_PULLUP;                     // 上拉
-    gpio_initstruct.Speed = GPIO_SPEED_FREQ_HIGH;           // 高速
-    HAL_GPIO_Init(GPIOA, &gpio_initstruct);
+    gpio_init_struct.Pin = KEY1_GPIO_PIN;                       /* KEY1引脚 */
+    gpio_init_struct.Mode = GPIO_MODE_INPUT;                    /* 输入 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                        /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;              /* 高速 */
+    HAL_GPIO_Init(KEY1_GPIO_PORT, &gpio_init_struct);           /* KEY1引脚模式设置,上拉输入 */
+
+    gpio_init_struct.Pin = KEY2_GPIO_PIN;                       /* KEY2引脚 */
+    gpio_init_struct.Mode = GPIO_MODE_INPUT;                    /* 输入 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                        /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;              /* 高速 */
+    HAL_GPIO_Init(KEY2_GPIO_PORT, &gpio_init_struct);           /* KEY2引脚模式设置,上拉输入 */
+
+    gpio_init_struct.Pin = WKUP_GPIO_PIN;                       /* WKUP引脚 */
+    gpio_init_struct.Mode = GPIO_MODE_INPUT;                    /* 输入 */
+    gpio_init_struct.Pull = GPIO_PULLDOWN;                      /* 下拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;              /* 高速 */
+    HAL_GPIO_Init(WKUP_GPIO_PORT, &gpio_init_struct);           /* WKUP引脚模式设置,下拉输入 */
+
 }
 
-// 按键扫描函数
-uint8_t key_scan(void)
+/**
+ * @brief       按键扫描函数
+ * @note        该函数有响应优先级(同时按下多个按键): WK_UP > KEY2 > KEY1 > KEY0!!
+ * @param       mode:0 / 1, 具体含义如下:
+ *   @arg       0,  不支持连续按(当按键按下不放时, 只有第一次调用会返回键值,
+ *                  必须松开以后, 再次按下才会返回其他键值)
+ *   @arg       1,  支持连续按(当按键按下不放时, 每次调用该函数都会返回键值)
+ * @retval      键值, 定义如下:
+ *              KEY0_PRES, 1, KEY0按下
+ *              KEY1_PRES, 2, KEY1按下
+ *              KEY2_PRES, 3, KEY2按下
+ *              WKUP_PRES, 4, WKUP按下
+ */
+uint8_t key_scan(uint8_t mode)
 {
-    // 检测按键是否按下
-    if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET)
-    {
-        // 消抖
-        // delay_ms(10);
-        // vTaskDelay(pdMS_TO_TICKS(10)); // 使用FreeRTOS的延时函数进行消抖
-        // 再次判断按键是否按下
-        if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET)
-        {
-            // 如果确实是按下状态，则等待按键松开
-            while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET);
+    static uint8_t key_up = 1;  /* 按键按松开标志 */
+    uint8_t keyval = 0;
 
-            // 返回按键值
-            return 1;
-        }
+    if (mode) key_up = 1;       /* 支持连按 */
+
+    if (key_up && (KEY0 == 0 || KEY1 == 0 || KEY2 == 0 || WK_UP == 1))  /* 按键松开标志为1, 且有任意一个按键按下了 */
+    {
+        delay_ms(10);           /* 去抖动 */
+        key_up = 0;
+
+        if (KEY0 == 0)  keyval = KEY0_PRES;
+
+        if (KEY1 == 0)  keyval = KEY1_PRES;
+
+        if (KEY2 == 0)  keyval = KEY2_PRES;
+
+        if (WK_UP == 1) keyval = WKUP_PRES;
+    }
+    else if (KEY0 == 1 && KEY1 == 1 && KEY2 == 1 && WK_UP == 0)         /* 没有任何按键按下, 标记按键松开 */
+    {
+        key_up = 1;
     }
 
-    // 检测按键是否按下
-    if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_RESET)
-    {
-        // 消抖
-        // delay_ms(10);
-        // vTaskDelay(pdMS_TO_TICKS(10)); // 使用FreeRTOS的延时函数进行消抖
-        // 再次判断按键是否按下
-        if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_RESET)
-        {
-            // 如果确实是按下状态，则等待按键松开
-            while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_RESET);
-
-            // 返回按键值
-            return 2;
-        }
-    }
-
-    // 返回默认值
-    return 0;
+    return keyval;              /* 返回键值 */
 }
+
+
+
+
+
+
+
+
+

@@ -39,6 +39,7 @@ file(GLOB_RECURSE SOURCES
     Core/Src/*.c
     Drivers/STM32F4xx_HAL_Driver/Src/*.c
     Middlewares/LVGL/src/*.c
+    Middlewares/ATK_MD0430/*.c
     Startup/*.s
 )
 
@@ -65,6 +66,7 @@ list(FILTER SOURCES EXCLUDE REGEX ".*_template\\.c$")
 add_executable(${PROJECT_NAME}
     ${SOURCES}
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE m)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SUFFIX ".elf"
@@ -81,6 +83,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     Middlewares/FreeRTOS/portable/GCC/ARM_CM4F
     # LVGL
     Middlewares/LVGL
+    # ATK_MD0430
+    Middlewares/ATK_MD0430
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
