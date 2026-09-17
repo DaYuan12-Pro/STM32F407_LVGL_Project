@@ -1,23 +1,23 @@
 /**
  ****************************************************************************************************
  * @file        malloc.c
- * @author      ����ԭ���Ŷ�(ALIENTEK)
+ * @author      正点原子团队(ALIENTEK)
  * @version     V1.0
  * @date        2021-11-04
- * @brief       �ڴ���� ����
- * @license     Copyright (c) 2020-2032, �������������ӿƼ����޹�˾
+ * @brief       内存管理 驱动
+ * @license     Copyright (c) 2020-2032, 广州市星翼电子科技有限公司
  ****************************************************************************************************
  * @attention
  *
- * ʵ��ƽ̨:����ԭ�� STM32������
- * ������Ƶ:www.yuanzige.com
- * ������̳:www.openedv.com
- * ��˾��ַ:www.alientek.com
- * �����ַ:openedv.taobao.com
+ * 实验平台:正点原子 STM32开发板
+ * 在线视频:www.yuanzige.com
+ * 技术论坛:www.openedv.com
+ * 公司网址:www.alientek.com
+ * 购买地址:openedv.taobao.com
  *
- * �޸�˵��
+ * 修改说明
  * V1.0 20211104
- * ��һ�η���
+ * 第一次发布
  *
  ****************************************************************************************************
  */
@@ -40,12 +40,12 @@ static MT_TYPE mem3mapbase[MEM3_ALLOC_TABLE_SIZE]
     __attribute__((section(".map_ext"), aligned(4)));
 
 
-/* �ڴ�������� */
-const uint32_t memtblsize[SRAMBANK] = {MEM1_ALLOC_TABLE_SIZE, MEM2_ALLOC_TABLE_SIZE, MEM3_ALLOC_TABLE_SIZE};    /* �ڴ����С */
-const uint32_t memblksize[SRAMBANK] = {MEM1_BLOCK_SIZE, MEM2_BLOCK_SIZE, MEM3_BLOCK_SIZE};                      /* �ڴ�ֿ��С */
-const uint32_t memsize[SRAMBANK] = {MEM1_MAX_SIZE, MEM2_MAX_SIZE, MEM3_MAX_SIZE};                               /* �ڴ��ܴ�С */
+/* 内存管理参数 */
+const uint32_t memtblsize[SRAMBANK] = {MEM1_ALLOC_TABLE_SIZE, MEM2_ALLOC_TABLE_SIZE, MEM3_ALLOC_TABLE_SIZE};    /* 内存表大小 */
+const uint32_t memblksize[SRAMBANK] = {MEM1_BLOCK_SIZE, MEM2_BLOCK_SIZE, MEM3_BLOCK_SIZE};                      /* 内存分块大小 */
+const uint32_t memsize[SRAMBANK] = {MEM1_MAX_SIZE, MEM2_MAX_SIZE, MEM3_MAX_SIZE};                               /* 内存总大小 */
 
-/* �ڴ���������� */
+/* 内存管理控制器 */
 struct _m_mallco_dev mallco_dev =
 {
     .init = my_mem_init,
@@ -56,11 +56,11 @@ struct _m_mallco_dev mallco_dev =
 };
 
 /**
- * @brief       �����ڴ�
- * @param       *des : Ŀ�ĵ�ַ
- * @param       *src : Դ��ַ
- * @param       n    : ��Ҫ���Ƶ��ڴ泤��(�ֽ�Ϊ��λ)
- * @retval      ��
+ * @brief       复制内存
+ * @param       *des : 目的地址
+ * @param       *src : 源地址
+ * @param       n    : 需要复制的内存长度(字节为单位)
+ * @retval      无
  */
 void my_mem_copy(void *des, void *src, uint32_t n)
 {
@@ -71,11 +71,11 @@ void my_mem_copy(void *des, void *src, uint32_t n)
 }
 
 /**
- * @brief       �����ڴ�ֵ
- * @param       *s    : �ڴ��׵�ַ
- * @param       c     : Ҫ���õ�ֵ
- * @param       count : ��Ҫ���õ��ڴ��С(�ֽ�Ϊ��λ)
- * @retval      ��
+ * @brief       设置内存值
+ * @param       *s    : 内存首地址
+ * @param       c     : 要设置的值
+ * @param       count : 需要设置的内存大小(字节为单位)
+ * @retval      无
  */
 void my_mem_set(void *s, uint8_t c, uint32_t count)
 {
@@ -85,21 +85,21 @@ void my_mem_set(void *s, uint8_t c, uint32_t count)
 }
 
 /**
- * @brief       �ڴ������ʼ��
- * @param       memx : �����ڴ��
- * @retval      ��
+ * @brief       内存管理初始化
+ * @param       memx : 所属内存块
+ * @retval      无
  */
 void my_mem_init(uint8_t memx)
 {
-    uint8_t mttsize = sizeof(MT_TYPE);  /* ��ȡmemmap��������ͳ���(uint16_t /uint32_t)*/
-    my_mem_set(mallco_dev.memmap[memx], 0, memtblsize[memx]*mttsize); /* �ڴ�״̬���������� */
-    mallco_dev.memrdy[memx] = 1;        /* �ڴ������ʼ��OK */
+    uint8_t mttsize = sizeof(MT_TYPE);  /* 获取memmap数组的类型长度(uint16_t /uint32_t)*/
+    my_mem_set(mallco_dev.memmap[memx], 0, memtblsize[memx]*mttsize); /* 内存状态表数据清零 */
+    mallco_dev.memrdy[memx] = 1;        /* 内存管理初始化OK */
 }
 
 /**
- * @brief       ��ȡ�ڴ�ʹ����
- * @param       memx : �����ڴ��
- * @retval      ʹ����(������10��,0~1000,����0.0%~100.0%)
+ * @brief       获取内存使用率
+ * @param       memx : 所属内存块
+ * @retval      使用率(扩大了10倍,0~1000,代表0.0%~100.0%)
  */
 uint16_t my_mem_perused(uint8_t memx)
 {
@@ -115,81 +115,81 @@ uint16_t my_mem_perused(uint8_t memx)
 }
 
 /**
- * @brief       �ڴ����(�ڲ�����)
- * @param       memx : �����ڴ��
- * @param       size : Ҫ������ڴ��С(�ֽ�)
- * @retval      �ڴ�ƫ�Ƶ�ַ
- *   @arg       0 ~ 0xFFFFFFFE : ��Ч���ڴ�ƫ�Ƶ�ַ
- *   @arg       0xFFFFFFFF     : ��Ч���ڴ�ƫ�Ƶ�ַ
+ * @brief       内存分配(内部调用)
+ * @param       memx : 所属内存块
+ * @param       size : 要分配的内存大小(字节)
+ * @retval      内存偏移地址
+ *   @arg       0 ~ 0xFFFFFFFE : 有效的内存偏移地址
+ *   @arg       0xFFFFFFFF     : 无效的内存偏移地址
  */
 static uint32_t my_mem_malloc(uint8_t memx, uint32_t size)
 {
     signed long offset = 0;
-    uint32_t nmemb;     /* ��Ҫ���ڴ���� */
-    uint32_t cmemb = 0; /* �������ڴ���� */
+    uint32_t nmemb;     /* 需要的内存块数 */
+    uint32_t cmemb = 0; /* 连续空内存块数 */
     uint32_t i;
 
     if (!mallco_dev.memrdy[memx])
     {
-        mallco_dev.init(memx);          /* δ��ʼ��,��ִ�г�ʼ�� */
+        mallco_dev.init(memx);          /* 未初始化,先执行初始化 */
     }
     
-    if (size == 0) return 0xFFFFFFFF;   /* ����Ҫ���� */
+    if (size == 0) return 0xFFFFFFFF;   /* 不需要分配 */
 
-    nmemb = size / memblksize[memx];    /* ��ȡ��Ҫ����������ڴ���� */
+    nmemb = size / memblksize[memx];    /* 获取需要分配的连续内存块数 */
 
     if (size % memblksize[memx]) nmemb++;
 
-    for (offset = memtblsize[memx] - 1; offset >= 0; offset--)  /* ���������ڴ������ */
+    for (offset = memtblsize[memx] - 1; offset >= 0; offset--)  /* 搜索整个内存控制区 */
     {
         if (!mallco_dev.memmap[memx][offset])
         {
-            cmemb++;                    /* �������ڴ�������� */
+            cmemb++;                    /* 连续空内存块数增加 */
         }
         else 
         {
-            cmemb = 0;                  /* �����ڴ������ */
+            cmemb = 0;                  /* 连续内存块清零 */
         }
         
-        if (cmemb == nmemb)             /* �ҵ�������nmemb�����ڴ�� */
+        if (cmemb == nmemb)             /* 找到了连续nmemb个空内存块 */
         {
-            for (i = 0; i < nmemb; i++) /* ��ע�ڴ��ǿ� */
+            for (i = 0; i < nmemb; i++) /* 标注内存块非空 */
             {
                 mallco_dev.memmap[memx][offset + i] = nmemb;
             }
 
-            return (offset * memblksize[memx]); /* ����ƫ�Ƶ�ַ */
+            return (offset * memblksize[memx]); /* 返回偏移地址 */
         }
     }
 
-    return 0xFFFFFFFF;  /* δ�ҵ����Ϸ����������ڴ�� */
+    return 0xFFFFFFFF;  /* 未找到符合分配条件的内存块 */
 }
 
 /**
- * @brief       �ͷ��ڴ�(�ڲ�����)
- * @param       memx   : �����ڴ��
- * @param       offset : �ڴ��ַƫ��
- * @retval      �ͷŽ��
- *   @arg       0, �ͷųɹ�;
- *   @arg       1, �ͷ�ʧ��;
- *   @arg       2, ��������(ʧ��);
+ * @brief       释放内存(内部调用)
+ * @param       memx   : 所属内存块
+ * @param       offset : 内存地址偏移
+ * @retval      释放结果
+ *   @arg       0, 释放成功;
+ *   @arg       1, 释放失败;
+ *   @arg       2, 超区域了(失败);
  */
 static uint8_t my_mem_free(uint8_t memx, uint32_t offset)
 {
     int i;
 
-    if (!mallco_dev.memrdy[memx])   /* δ��ʼ��,��ִ�г�ʼ�� */
+    if (!mallco_dev.memrdy[memx])   /* 未初始化,先执行初始化 */
     {
         mallco_dev.init(memx);
-        return 1;                   /* δ��ʼ�� */
+        return 1;                   /* 未初始化 */
     }
 
-    if (offset < memsize[memx])     /* ƫ�����ڴ����. */
+    if (offset < memsize[memx])     /* 偏移在内存池内. */
     {
-        int index = offset / memblksize[memx];      /* ƫ�������ڴ����� */
-        int nmemb = mallco_dev.memmap[memx][index]; /* �ڴ������ */
+        int index = offset / memblksize[memx];      /* 偏移所在内存块号码 */
+        int nmemb = mallco_dev.memmap[memx][index]; /* 内存块数量 */
 
-        for (i = 0; i < nmemb; i++)                 /* �ڴ������ */
+        for (i = 0; i < nmemb; i++)                 /* 内存块清零 */
         {
             mallco_dev.memmap[memx][index + i] = 0;
         }
@@ -198,68 +198,68 @@ static uint8_t my_mem_free(uint8_t memx, uint32_t offset)
     }
     else
     {
-        return 2;   /* ƫ�Ƴ�����. */
+        return 2;   /* 偏移超区了. */
     }
 }
 
 /**
- * @brief       �ͷ��ڴ�(�ⲿ����)
- * @param       memx : �����ڴ��
- * @param       ptr  : �ڴ��׵�ַ
- * @retval      ��
+ * @brief       释放内存(外部调用)
+ * @param       memx : 所属内存块
+ * @param       ptr  : 内存首地址
+ * @retval      无
  */
 void myfree(uint8_t memx, void *ptr)
 {
     uint32_t offset;
 
-    if (ptr == NULL)return;     /* ��ַΪ0. */
+    if (ptr == NULL)return;     /* 地址为0. */
 
     offset = (uint32_t)ptr - (uint32_t)mallco_dev.membase[memx];
-    my_mem_free(memx, offset);  /* �ͷ��ڴ� */
+    my_mem_free(memx, offset);  /* 释放内存 */
 }
 
 /**
- * @brief       �����ڴ�(�ⲿ����)
- * @param       memx : �����ڴ��
- * @param       size : Ҫ������ڴ��С(�ֽ�)
- * @retval      ���䵽���ڴ��׵�ַ.
+ * @brief       分配内存(外部调用)
+ * @param       memx : 所属内存块
+ * @param       size : 要分配的内存大小(字节)
+ * @retval      分配到的内存首地址.
  */
 void *mymalloc(uint8_t memx, uint32_t size)
 {
     uint32_t offset;
     
     offset = my_mem_malloc(memx, size);
-    if (offset == 0xFFFFFFFF)   /* ������� */
+    if (offset == 0xFFFFFFFF)   /* 申请出错 */
     {
-        return NULL;            /* ���ؿ�(0) */
+        return NULL;            /* 返回空(0) */
     }
-    else    /* ����û����, �����׵�ַ */
+    else    /* 申请没问题, 返回首地址 */
     {
         return (void *)((uint32_t)mallco_dev.membase[memx] + offset);
     }
 }
 
 /**
- * @brief       ���·����ڴ�(�ⲿ����)
- * @param       memx : �����ڴ��
- * @param       *ptr : ���ڴ��׵�ַ
- * @param       size : Ҫ������ڴ��С(�ֽ�)
- * @retval      �·��䵽���ڴ��׵�ַ.
+ * @brief       重新分配内存(外部调用)
+ * @param       memx : 所属内存块
+ * @param       *ptr : 旧内存首地址
+ * @param       size : 要分配的内存大小(字节)
+ * @retval      新分配到的内存首地址.
  */
 void *myrealloc(uint8_t memx, void *ptr, uint32_t size)
 {
     uint32_t offset;
     
     offset = my_mem_malloc(memx, size);
-    if (offset == 0xFFFFFFFF)   /* ������� */
+    if (offset == 0xFFFFFFFF)   /* 申请出错 */
     {
-        return NULL;            /* ���ؿ�(0) */
+        return NULL;            /* 返回空(0) */
     }
-    else    /* ����û����, �����׵�ַ */
+    else    /* 申请没问题, 返回首地址 */
     {
-        my_mem_copy((void *)((uint32_t)mallco_dev.membase[memx] + offset), ptr, size); /* �������ڴ����ݵ����ڴ� */
-        myfree(memx, ptr);  /* �ͷž��ڴ� */
-        return (void *)((uint32_t)mallco_dev.membase[memx] + offset);   /* �������ڴ��׵�ַ */
+        my_mem_copy((void *)((uint32_t)mallco_dev.membase[memx] + offset), ptr, size); /* 拷贝旧内存内容到新内存 */
+        myfree(memx, ptr);  /* 释放旧内存 */
+        return (void *)((uint32_t)mallco_dev.membase[memx] + offset);   /* 返回新内存首地址 */
     }
 }
 

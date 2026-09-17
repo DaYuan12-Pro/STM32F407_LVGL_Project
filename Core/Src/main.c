@@ -43,12 +43,5 @@ int main(void)
     my_mem_init(SRAMIN);                                    /* 初始化内部SRAM内存池 */
     my_mem_init(SRAMEX);                                    /* 初始化外部SRAM内存池 */
 
-    // while(1)
-    // {
-    //     LED0_TOGGLE();
-    //     HAL_Delay(200);
-    //     LED1_TOGGLE();
-    //     HAL_Delay(500);
-    // }
     lvgl_demo();                                            /* 运行FreeRTOS例程 */
 }

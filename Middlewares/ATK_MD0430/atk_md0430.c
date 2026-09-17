@@ -1,19 +1,19 @@
 /**
  ****************************************************************************************************
  * @file        atk_md0430.c
- * @author      ����ԭ���Ŷ�(ALIENTEK)
+ * @author      正点原子团队(ALIENTEK)
  * @version     V1.0
  * @date        2022-06-21
- * @brief       ATK-MD0430ģ����������
- * @license     Copyright (c) 2020-2032, �������������ӿƼ����޹�˾
+ * @brief       ATK-MD0430模块驱动代码
+ * @license     Copyright (c) 2020-2032, 广州市星翼电子科技有限公司
  ****************************************************************************************************
  * @attention
  *
- * ʵ��ƽ̨:����ԭ�� ̽���� F407������
- * ������Ƶ:www.yuanzige.com
- * ������̳:www.openedv.com
- * ��˾��ַ:www.alientek.com
- * �����ַ:openedv.taobao.com
+ * 实验平台:正点原子 探索者 F407开发板
+ * 在线视频:www.yuanzige.com
+ * 技术论坛:www.openedv.com
+ * 公司网址:www.alientek.com
+ * 购买地址:openedv.taobao.com
  *
  ****************************************************************************************************
  */
@@ -23,11 +23,11 @@
 #include "atk_md0430_fsmc.h"
 #include "delay.h"
 
-/* ATK-MD0430ģ��LCD������ID */
+/* ATK-MD0430模块LCD驱动器ID */
 #define ATK_MD0430_CHIP_ID1         0x5510
 #define ATK_MD0430_CHIP_ID2         0x9806
 
-/* ATK-MD0430ģ��LCDɨ�跽�� */
+/* ATK-MD0430模块LCD扫描方向 */
 #define ATK_MD0430_SCAN_DIR_L2R_U2D (0x0000)
 #define ATK_MD0430_SCAN_DIR_L2R_D2U (0x0080)
 #define ATK_MD0430_SCAN_DIR_R2L_U2D (0x0040)
@@ -37,29 +37,29 @@
 #define ATK_MD0430_SCAN_DIR_D2U_L2R (0x00A0)
 #define ATK_MD0430_SCAN_DIR_D2U_R2L (0x00E0)
 
-/* ATK-MD0430ģ��״̬���ݽṹ�� */
+/* ATK-MD0430模块状态数据结构体 */
 static struct
 {
-    uint16_t chip_id;                   /* ������ID */
-    uint16_t width;                     /* LCD���� */
-    uint16_t height;                    /* LCD�߶� */
-    atk_md0430_lcd_scan_dir_t scan_dir; /* LCDɨ�跽�� */
-    atk_md0430_lcd_disp_dir_t disp_dir; /* LCD��ʾ���� */
+    uint16_t chip_id;                   /* 驱动器ID */
+    uint16_t width;                     /* LCD宽度 */
+    uint16_t height;                    /* LCD高度 */
+    atk_md0430_lcd_scan_dir_t scan_dir; /* LCD扫描方向 */
+    atk_md0430_lcd_disp_dir_t disp_dir; /* LCD显示方向 */
 } g_atk_md0430_sta = {0};
 
 /**
- * @brief       ATK-MD0430ģ��Ӳ����ʼ��
- * @param       ��
- * @retval      ��
+ * @brief       ATK-MD0430模块硬件初始化
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_hw_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct = {0};
     
-    /* ʹ��ʱ�� */
+    /* 使能时钟 */
     ATK_MD0430_BL_GPIO_CLK_ENABLE();
     
-    /* ��ʼ��BL���� */
+    /* 初始化BL引脚 */
     gpio_init_struct.Pin    = ATK_MD0430_BL_GPIO_PIN;
     gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;
     gpio_init_struct.Pull   = GPIO_PULLUP;
@@ -70,9 +70,9 @@ static void atk_md0430_hw_init(void)
 }
 
 /**
- * @brief       ��ȡATK-MD0430ģ��������ID
- * @param       ��
- * @retval      ��
+ * @brief       获取ATK-MD0430模块驱动器ID
+ * @param       无
+ * @retval      无
  */
 static inline uint16_t atk_md0430_get_chip_id(void)
 {
@@ -91,7 +91,7 @@ static inline uint16_t atk_md0430_get_chip_id(void)
 
     if (chip_id != ATK_MD0430_CHIP_ID1)
     {
-        /* ���Ի�ȡID2 */
+        /* 尝试获取ID2 */
         atk_md0430_fsmc_write_cmd(0XD3);
         chip_id = atk_md0430_fsmc_read_dat();
         chip_id = atk_md0430_fsmc_read_dat();
@@ -103,9 +103,9 @@ static inline uint16_t atk_md0430_get_chip_id(void)
 }
 
 /**
- * @brief       ATK-MD0430ģ��Ĵ�����ʼ��
- * @param       ��
- * @retval      ��
+ * @brief       ATK-MD0430模块寄存器初始化
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_reg_init(void)
 {
@@ -640,9 +640,9 @@ static void atk_md0430_reg_init(void)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ���е�ַ
- * @param       ��
- * @retval      ��
+ * @brief       设置ATK-MD0430模块列地址
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_set_column_address(uint16_t sc, uint16_t ec)
 {
@@ -668,9 +668,9 @@ static void atk_md0430_set_column_address(uint16_t sc, uint16_t ec)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ��ҳ��ַ
- * @param       ��
- * @retval      ��
+ * @brief       设置ATK-MD0430模块页地址
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_set_page_address(uint16_t sp, uint16_t ep)
 {
@@ -696,9 +696,9 @@ static void atk_md0430_set_page_address(uint16_t sp, uint16_t ep)
 }
 
 /**
- * @brief       ��ʼдATK-MD0430ģ���Դ�
- * @param       ��
- * @retval      ��
+ * @brief       开始写ATK-MD0430模块显存
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_start_write_memory(void)
 {
@@ -713,9 +713,9 @@ static void atk_md0430_start_write_memory(void)
 }
 
 /**
- * @brief       ��ʼ��ATK-MD0430ģ���Դ�
- * @param       ��
- * @retval      ��
+ * @brief       开始读ATK-MD0430模块显存
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_start_read_memory(void)
 {
@@ -730,9 +730,9 @@ static void atk_md0430_start_read_memory(void)
 }
 
 /**
- * @brief       ƽ��������x^y
- * @param       x: ����
- *              y: ָ��
+ * @brief       平方函数，x^y
+ * @param       x: 底数
+ *              y: 指数
  * @retval      x^y
  */
 static uint32_t atk_md0430_pow(uint8_t x, uint8_t y)
@@ -749,10 +749,10 @@ static uint32_t atk_md0430_pow(uint8_t x, uint8_t y)
 }
 
 /**
- * @brief       ATK-MD0430ģ���ʼ��
- * @param       ��
- * @retval      ATK_MD0430_EOK  : ATK_MD0430ģ���ʼ���ɹ�
- *              ATK_MD0430_ERROR: ATK_MD0430ģ���ʼ��ʧ��
+ * @brief       ATK-MD0430模块初始化
+ * @param       无
+ * @retval      ATK_MD0430_EOK  : ATK_MD0430模块初始化成功
+ *              ATK_MD0430_ERROR: ATK_MD0430模块初始化失败
  */
 uint8_t atk_md0430_init(void)
 {
@@ -761,9 +761,9 @@ uint8_t atk_md0430_init(void)
     uint8_t ret;
 #endif
     
-    atk_md0430_hw_init();               /* ATK-MD0430ģ��Ӳ����ʼ�� */
-    atk_md0430_fsmc_init();             /* ATK-MD0430ģ��FSMC�ӿڳ�ʼ�� */
-    chip_id = atk_md0430_get_chip_id(); /* ��ȡATK-MD0430ģ��������ID */
+    atk_md0430_hw_init();               /* ATK-MD0430模块硬件初始化 */
+    atk_md0430_fsmc_init();             /* ATK-MD0430模块FSMC接口初始化 */
+    chip_id = atk_md0430_get_chip_id(); /* 获取ATK-MD0430模块驱动器ID */
     if ((chip_id != ATK_MD0430_CHIP_ID1) && (chip_id != ATK_MD0430_CHIP_ID2))
     {
         return ATK_MD0430_ERROR;
@@ -791,9 +791,9 @@ uint8_t atk_md0430_init(void)
 }
 
 /**
- * @brief       ��ȡATK-MD0430ģ��LCD����
- * @param       ��
- * @retval      ATK-MD0430ģ��LCD����
+ * @brief       获取ATK-MD0430模块LCD宽度
+ * @param       无
+ * @retval      ATK-MD0430模块LCD宽度
  */
 uint16_t atk_md0430_get_lcd_width(void)
 {
@@ -801,9 +801,9 @@ uint16_t atk_md0430_get_lcd_width(void)
 }
 
 /**
- * @brief       ��ȡATK-MD0430ģ��LCD�߶�
- * @param       ��
- * @retval      ATK-MD0430ģ��LCD�߶�
+ * @brief       获取ATK-MD0430模块LCD高度
+ * @param       无
+ * @retval      ATK-MD0430模块LCD高度
  */
 uint16_t atk_md0430_get_lcd_height(void)
 {
@@ -811,9 +811,9 @@ uint16_t atk_md0430_get_lcd_height(void)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ��LCD����
- * @param       ��
- * @retval      ��
+ * @brief       开启ATK-MD0430模块LCD背光
+ * @param       无
+ * @retval      无
  */
 void atk_md0430_backlight_on(void)
 {
@@ -821,9 +821,9 @@ void atk_md0430_backlight_on(void)
 }
 
 /**
- * @brief       �ر�ATK-MD0430ģ��LCD����
- * @param       ��
- * @retval      ��
+ * @brief       关闭ATK-MD0430模块LCD背光
+ * @param       无
+ * @retval      无
  */
 void atk_md0430_backlight_off(void)
 {
@@ -831,9 +831,9 @@ void atk_md0430_backlight_off(void)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ��LCD��ʾ
- * @param       ��
- * @retval      ��
+ * @brief       开启ATK-MD0430模块LCD显示
+ * @param       无
+ * @retval      无
  */
 void atk_md0430_display_on(void)
 {
@@ -848,9 +848,9 @@ void atk_md0430_display_on(void)
 }
 
 /**
- * @brief       �ر�ATK-MD0430ģ��LCD��ʾ
- * @param       ��
- * @retval      ��
+ * @brief       关闭ATK-MD0430模块LCD显示
+ * @param       无
+ * @retval      无
  */
 void atk_md0430_display_off(void)
 {
@@ -865,18 +865,18 @@ void atk_md0430_display_off(void)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ��LCDɨ�跽��
- * @param       scan_dir: ATK_MD0430_LCD_SCAN_DIR_L2R_U2D: �����ң����ϵ���
- *                        ATK_MD0430_LCD_SCAN_DIR_L2R_D2U: �����ң����µ���
- *                        ATK_MD0430_LCD_SCAN_DIR_R2L_U2D: ���ҵ��󣬴��ϵ���
- *                        ATK_MD0430_LCD_SCAN_DIR_R2L_D2U: ���ҵ��󣬴��µ���
- *                        ATK_MD0430_LCD_SCAN_DIR_U2D_L2R: ���ϵ��£�������
- *                        ATK_MD0430_LCD_SCAN_DIR_U2D_R2L: ���ϵ��£����ҵ���
- *                        ATK_MD0430_LCD_SCAN_DIR_D2U_L2R: ���µ��ϣ�������
- *                        ATK_MD0430_LCD_SCAN_DIR_D2U_R2L: ���µ��ϣ����ҵ���
- * @retval      ATK_MD0430_EOK   : ����ATK-MD0430ģ��LCDɨ�跽��ɹ�
- *              ATK_MD0430_ERROR : ����ATK-MD0430ģ��LCDɨ�跽��ʧ��
-*               ATK_MD0430_EINVAL: �����������
+ * @brief       设置ATK-MD0430模块LCD扫描方向
+ * @param       scan_dir: ATK_MD0430_LCD_SCAN_DIR_L2R_U2D: 从左到右，从上到下
+ *                        ATK_MD0430_LCD_SCAN_DIR_L2R_D2U: 从左到右，从下到上
+ *                        ATK_MD0430_LCD_SCAN_DIR_R2L_U2D: 从右到左，从上到下
+ *                        ATK_MD0430_LCD_SCAN_DIR_R2L_D2U: 从右到左，从下到上
+ *                        ATK_MD0430_LCD_SCAN_DIR_U2D_L2R: 从上到下，从左到右
+ *                        ATK_MD0430_LCD_SCAN_DIR_U2D_R2L: 从上到下，从右到左
+ *                        ATK_MD0430_LCD_SCAN_DIR_D2U_L2R: 从下到上，从左到右
+ *                        ATK_MD0430_LCD_SCAN_DIR_D2U_R2L: 从下到上，从右到左
+ * @retval      ATK_MD0430_EOK   : 设置ATK-MD0430模块LCD扫描方向成功
+ *              ATK_MD0430_ERROR : 设置ATK-MD0430模块LCD扫描方向失败
+*               ATK_MD0430_EINVAL: 传入参数错误
  */
 uint8_t atk_md0430_set_scan_dir(atk_md0430_lcd_scan_dir_t scan_dir)
 {
@@ -1068,13 +1068,13 @@ uint8_t atk_md0430_set_scan_dir(atk_md0430_lcd_scan_dir_t scan_dir)
 }
 
 /**
- * @brief       ����ATK-MD0430ģ��LCD��ʾ����
- * @param       disp_dir: ATK_MD0430_LCD_DISP_DIR_0  : LCD˳ʱ����ת0����ʾ����
- *                        ATK_MD0430_LCD_DISP_DIR_90 : LCD˳ʱ����ת90����ʾ����
- *                        ATK_MD0430_LCD_DISP_DIR_180: LCD˳ʱ����ת180����ʾ����
- *                        ATK_MD0430_LCD_DISP_DIR_270: LCD˳ʱ����ת270����ʾ����
- * @retval      ATK_MD0430_EOK   : ����ATK-MD0430ģ��LCD��ʾ����ɹ�
- *              ATK_MD0430_EINVAL: �����������
+ * @brief       设置ATK-MD0430模块LCD显示方向
+ * @param       disp_dir: ATK_MD0430_LCD_DISP_DIR_0  : LCD顺时针旋转0°显示内容
+ *                        ATK_MD0430_LCD_DISP_DIR_90 : LCD顺时针旋转90°显示内容
+ *                        ATK_MD0430_LCD_DISP_DIR_180: LCD顺时针旋转180°显示内容
+ *                        ATK_MD0430_LCD_DISP_DIR_270: LCD顺时针旋转270°显示内容
+ * @retval      ATK_MD0430_EOK   : 设置ATK-MD0430模块LCD显示方向成功
+ *              ATK_MD0430_EINVAL: 传入参数错误
  */
 uint8_t atk_md0430_set_disp_dir(atk_md0430_lcd_disp_dir_t disp_dir)
 {
@@ -1117,9 +1117,9 @@ uint8_t atk_md0430_set_disp_dir(atk_md0430_lcd_disp_dir_t disp_dir)
 }
 
 /**
- * @brief       ��ȡATK-MD0430ģ��LCDɨ�跽��
- * @param       ��
- * @retval      ATK-MD0430ģ��LCDɨ�跽��
+ * @brief       获取ATK-MD0430模块LCD扫描方向
+ * @param       无
+ * @retval      ATK-MD0430模块LCD扫描方向
  */
 atk_md0430_lcd_scan_dir_t atk_md0430_get_scan_dir(void)
 {
@@ -1127,9 +1127,9 @@ atk_md0430_lcd_scan_dir_t atk_md0430_get_scan_dir(void)
 }
 
 /**
- * @brief       ��ȡATK-MD0430ģ��LCD��ʾ����
- * @param       ��
- * @retval      ATK-MD0430ģ��LCD��ʾ����
+ * @brief       获取ATK-MD0430模块LCD显示方向
+ * @param       无
+ * @retval      ATK-MD0430模块LCD显示方向
  */
 atk_md0430_lcd_disp_dir_t atk_md0430_get_disp_dir(void)
 {
@@ -1137,13 +1137,13 @@ atk_md0430_lcd_disp_dir_t atk_md0430_get_disp_dir(void)
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD�������
- * @param       xs   : ������ʼX����
- *              ys   : ������ʼY����
- *              xe   : ������ֹX����
- *              ye   : ������ֹY����
- *              color: ���������ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD区域填充
+ * @param       xs   : 区域起始X坐标
+ *              ys   : 区域起始Y坐标
+ *              xe   : 区域终止X坐标
+ *              ye   : 区域终止Y坐标
+ *              color: 区域填充颜色
+ * @retval      无
  */
 void atk_md0430_fill(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye, uint16_t color)
 {
@@ -1163,9 +1163,9 @@ void atk_md0430_fill(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye, uint16_
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD����
- * @param       color: ������ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD清屏
+ * @param       color: 清屏颜色
+ * @retval      无
  */
 void atk_md0430_clear(uint16_t color)
 {
@@ -1173,11 +1173,11 @@ void atk_md0430_clear(uint16_t color)
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD����
- * @param       x    : �������X����
- *              y    : �������Y����
- *              color: ���������ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD画点
+ * @param       x    : 待画点的X坐标
+ *              y    : 待画点的Y坐标
+ *              color: 待画点的颜色
+ * @retval      无
  */
 void atk_md0430_draw_point(uint16_t x, uint16_t y, uint16_t color)
 {
@@ -1188,10 +1188,10 @@ void atk_md0430_draw_point(uint16_t x, uint16_t y, uint16_t color)
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD����
- * @param       x    : �������X����
- *              y    : �������Y����
- * @retval      ���������ɫ
+ * @brief       ATK-MD0430模块LCD读点
+ * @param       x    : 待读点的X坐标
+ *              y    : 待读点的Y坐标
+ * @retval      待读点的颜色
  */
 uint16_t atk_md0430_read_point(uint16_t x, uint16_t y)
 {
@@ -1220,13 +1220,13 @@ uint16_t atk_md0430_read_point(uint16_t x, uint16_t y)
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD���߶�
- * @param       x1   : �����߶ζ˵�1��X����
- *              y1   : �����߶ζ˵�1��Y����
- *              x2   : �����߶ζ˵�2��X����
- *              y2   : �����߶ζ˵�2��Y����
- *              color: �����߶ε���ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD画线段
+ * @param       x1   : 待画线段端点1的X坐标
+ *              y1   : 待画线段端点1的Y坐标
+ *              x2   : 待画线段端点2的X坐标
+ *              y2   : 待画线段端点2的Y坐标
+ *              color: 待画线段的颜色
+ * @retval      无
  */
 void atk_md0430_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
@@ -1265,13 +1265,13 @@ void atk_md0430_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD�����ο�
- * @param       x1   : �������ο�˵�1��X����
- *              y1   : �������ο�˵�1��Y����
- *              x2   : �������ο�˵�2��X����
- *              y2   : �������ο�˵�2��Y����
- *              color: �������ο����ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD画矩形框
+ * @param       x1   : 待画矩形框端点1的X坐标
+ *              y1   : 待画矩形框端点1的Y坐标
+ *              x2   : 待画矩形框端点2的X坐标
+ *              y2   : 待画矩形框端点2的Y坐标
+ *              color: 待画矩形框的颜色
+ * @retval      无
  */
 void atk_md0430_draw_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
@@ -1282,12 +1282,12 @@ void atk_md0430_draw_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD��Բ�ο�
- * @param       x    : ����Բ�ο�ԭ���X����
- *              y    : ����Բ�ο�ԭ���Y����
- *              r    : ����Բ�ο�İ뾶
- *              color: ����Բ�ο����ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD画圆形框
+ * @param       x    : 待画圆形框原点的X坐标
+ *              y    : 待画圆形框原点的Y坐标
+ *              r    : 待画圆形框的半径
+ *              color: 待画圆形框的颜色
+ * @retval      无
  */
 void atk_md0430_draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 {
@@ -1326,13 +1326,13 @@ void atk_md0430_draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD��ʾ1���ַ�
- * @param       x    : ����ʾ�ַ���X����
- *              y    : ����ʾ�ַ���Y����
- *              ch   : ����ʾ�ַ�
- *              font : ����ʾ�ַ�������
- *              color: ����ʾ�ַ�����ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD显示1个字符
+ * @param       x    : 待显示字符的X坐标
+ *              y    : 待显示字符的Y坐标
+ *              ch   : 待显示字符
+ *              font : 待显示字符的字体
+ *              color: 待显示字符的颜色
+ * @retval      无
  */
 void atk_md0430_show_char(uint16_t x, uint16_t y, char ch, atk_md0430_lcd_font_t font, uint16_t color)
 {
@@ -1424,16 +1424,16 @@ void atk_md0430_show_char(uint16_t x, uint16_t y, char ch, atk_md0430_lcd_font_t
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD��ʾ�ַ���
- * @note        ���Զ����кͻ�ҳ
- * @param       x     : ����ʾ�ַ�����X����
- *              y     : ����ʾ�ַ�����Y����
- *              width : ����ʾ�ַ�������ʾ�߶�
- *              height: ����ʾ�ַ�������ʾ����
- *              str   : ����ʾ�ַ���
- *              font  : ����ʾ�ַ���������
- *              color : ����ʾ�ַ�������ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD显示字符串
+ * @note        会自动换行和换页
+ * @param       x     : 待显示字符串的X坐标
+ *              y     : 待显示字符串的Y坐标
+ *              width : 待显示字符串的显示高度
+ *              height: 待显示字符串的显示宽度
+ *              str   : 待显示字符串
+ *              font  : 待显示字符串的字体
+ *              color : 待显示字符串的颜色
+ * @retval      无
  */
 void atk_md0430_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t height, char *str, atk_md0430_lcd_font_t font, uint16_t color)
 {
@@ -1511,16 +1511,16 @@ void atk_md0430_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t hei
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD��ʾ���֣��ɿ�����ʾ��λ0
- * @param       x    : ����ʾ���ֵ�X����
- *              y    : ����ʾ���ֵ�Y����
- *              num  : ����ʾ����
- *              len  : ����ʾ���ֵ�λ��
- *              mode : ATK_MD0430_NUM_SHOW_NOZERO: ���ָ�λ0����ʾ
- *                     ATK_MD0430_NUM_SHOW_ZERO  : ���ָ�λ0��ʾ
- *              font : ����ʾ���ֵ�����
- *              color: ����ʾ���ֵ���ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD显示数字，可控制显示高位0
+ * @param       x    : 待显示数字的X坐标
+ *              y    : 待显示数字的Y坐标
+ *              num  : 待显示数字
+ *              len  : 待显示数字的位数
+ *              mode : ATK_MD0430_NUM_SHOW_NOZERO: 数字高位0不显示
+ *                     ATK_MD0430_NUM_SHOW_ZERO  : 数字高位0显示
+ *              font : 待显示数字的字体
+ *              color: 待显示数字的颜色
+ * @retval      无
  */
 void atk_md0430_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_md0430_num_mode_t mode, atk_md0430_lcd_font_t font, uint16_t color)
 {
@@ -1605,14 +1605,14 @@ void atk_md0430_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCD��ʾ���֣�����ʾ��λ0
- * @param       x    : ����ʾ���ֵ�X����
- *              y    : ����ʾ���ֵ�Y����
- *              num  : ����ʾ����
- *              len  : ����ʾ���ֵ�λ��
- *              font : ����ʾ���ֵ�����
- *              color: ����ʾ���ֵ���ɫ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD显示数字，不显示高位0
+ * @param       x    : 待显示数字的X坐标
+ *              y    : 待显示数字的Y坐标
+ *              num  : 待显示数字
+ *              len  : 待显示数字的位数
+ *              font : 待显示数字的字体
+ *              color: 待显示数字的颜色
+ * @retval      无
  */
 void atk_md0430_show_num(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_md0430_lcd_font_t font, uint16_t color)
 {
@@ -1620,14 +1620,14 @@ void atk_md0430_show_num(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_
 }
 
 /**
- * @brief       ATK-MD0430ģ��LCDͼƬ
- * @note        ͼƬȡģ��ʽ: ˮƽɨ�衢RGB565����λ��ǰ
- * @param       x     : ����ʾͼƬ��X����
- *              y     : ����ʾͼƬ��Y����
- *              width : ����ʾͼƬ�Ŀ���
- *              height: ����ʾͼƬ�ĸ߶�
- *              pic   : ����ʾͼƬ�����׵�ַ
- * @retval      ��
+ * @brief       ATK-MD0430模块LCD图片
+ * @note        图片取模方式: 水平扫描、RGB565、高位在前
+ * @param       x     : 待显示图片的X坐标
+ *              y     : 待显示图片的Y坐标
+ *              width : 待显示图片的宽度
+ *              height: 待显示图片的高度
+ *              pic   : 待显示图片数组首地址
+ * @retval      无
  */
 void atk_md0430_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t *pic)
 {

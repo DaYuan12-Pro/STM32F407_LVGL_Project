@@ -1,29 +1,29 @@
 /**
  ****************************************************************************************************
  * @file        GT9XXX.h
- * @author      ÕýµãÔ­×ÓÍÅ¶Ó(ALIENTEK)
+ * @author      æ­£ç‚¹åŽŸå­å›¢é˜Ÿ(ALIENTEK)
  * @version     V1.1
  * @date        2023-05-29
- * @brief       4.3´çµçÈÝ´¥ÃþÆÁ-GT9xxx Çý¶¯´úÂë
- *   @note      GTÏµÁÐµçÈÝ´¥ÃþÆÁICÍ¨ÓÃÇý¶¯,±¾´úÂëÖ§³Ö: GT9147/GT917S/GT968/GT1151/GT9271 µÈ¶àÖÖ
- *              Çý¶¯IC, ÕâÐ©Çý¶¯IC½öID²»Ò»Ñù, ¾ßÌå´úÂë»ù±¾²»ÐèÒª×öÈÎºÎÐÞ¸Ä¼´¿ÉÍ¨¹ý±¾´úÂëÖ±½ÓÇý¶¯
+ * @brief       4.3å¯¸ç”µå®¹è§¦æ‘¸å±-GT9xxx é©±åŠ¨ä»£ç 
+ *   @note      GTç³»åˆ—ç”µå®¹è§¦æ‘¸å±ICé€šç”¨é©±åŠ¨,æœ¬ä»£ç æ”¯æŒ: GT9147/GT917S/GT968/GT1151/GT9271 ç­‰å¤šç§
+ *              é©±åŠ¨IC, è¿™äº›é©±åŠ¨ICä»…IDä¸ä¸€æ ·, å…·ä½“ä»£ç åŸºæœ¬ä¸éœ€è¦åšä»»ä½•ä¿®æ”¹å³å¯é€šè¿‡æœ¬ä»£ç ç›´æŽ¥é©±åŠ¨
  *
- * @license     Copyright (c) 2020-2032, ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾
+ * @license     Copyright (c) 2020-2032, å¹¿å·žå¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸
  ****************************************************************************************************
  * @attention
  *
- * ÊµÑéÆ½Ì¨:ÕýµãÔ­×Ó Ì½Ë÷Õß F407¿ª·¢°å
- * ÔÚÏßÊÓÆµ:www.yuanzige.com
- * ¼¼ÊõÂÛÌ³:www.openedv.com
- * ¹«Ë¾ÍøÖ·:www.alientek.com
- * ¹ºÂòµØÖ·:openedv.taobao.com
+ * å®žéªŒå¹³å°:æ­£ç‚¹åŽŸå­ æŽ¢ç´¢è€… F407å¼€å‘æ¿
+ * åœ¨çº¿è§†é¢‘:www.yuanzige.com
+ * æŠ€æœ¯è®ºå›:www.openedv.com
+ * å…¬å¸ç½‘å€:www.alientek.com
+ * è´­ä¹°åœ°å€:openedv.taobao.com
  *
- * ÐÞ¸ÄËµÃ÷
+ * ä¿®æ”¹è¯´æ˜Ž
  * V1.0 20211025
- * µÚÒ»´Î·¢²¼
+ * ç¬¬ä¸€æ¬¡å‘å¸ƒ
  * V1.1 20230529
- * 1, ÐÂÔö¶ÔST7796 3.5´çÆÁ/ILI9806 4.3´çÆÁGT1151µÄÖ§³Ö
- * 2, gt9xxx_initº¯ÊýÖÐÔö¼Ó´¥ÃþICÅÐ¶¨£¬²»ÊôÓÚÌØ¶¨´¥ÃþIC¾Í·µ»Ø1±íÊ¾³õÊ¼»¯Ê§°Ü
+ * 1, æ–°å¢žå¯¹ST7796 3.5å¯¸å±/ILI9806 4.3å¯¸å±GT1151çš„æ”¯æŒ
+ * 2, gt9xxx_initå‡½æ•°ä¸­å¢žåŠ è§¦æ‘¸ICåˆ¤å®šï¼Œä¸å±žäºŽç‰¹å®šè§¦æ‘¸ICå°±è¿”å›ž1è¡¨ç¤ºåˆå§‹åŒ–å¤±è´¥
  ****************************************************************************************************
  */
 
@@ -34,57 +34,57 @@
 
 
 /******************************************************************************************/
-/* GT9XXX INT ºÍ RST Òý½Å ¶¨Òå */
+/* GT9XXX INT å’Œ RST å¼•è„š å®šä¹‰ */
 
 #define GT9XXX_RST_GPIO_PORT            GPIOC
 #define GT9XXX_RST_GPIO_PIN             GPIO_PIN_13
-#define GT9XXX_RST_GPIO_CLK_ENABLE()    do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* PC¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define GT9XXX_RST_GPIO_CLK_ENABLE()    do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* PCå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define GT9XXX_INT_GPIO_PORT            GPIOB
 #define GT9XXX_INT_GPIO_PIN             GPIO_PIN_1
-#define GT9XXX_INT_GPIO_CLK_ENABLE()    do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* PB¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define GT9XXX_INT_GPIO_CLK_ENABLE()    do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* PBå£æ—¶é’Ÿä½¿èƒ½ */
 
 /******************************************************************************************/
 
-/* ÓëµçÈÝ´¥ÃþÆÁÁ¬½ÓµÄÐ¾Æ¬Òý½Å(Î´°üº¬IICÒý½Å) 
- * IO²Ù×÷º¯Êý 
+/* ä¸Žç”µå®¹è§¦æ‘¸å±è¿žæŽ¥çš„èŠ¯ç‰‡å¼•è„š(æœªåŒ…å«IICå¼•è„š) 
+ * IOæ“ä½œå‡½æ•° 
  */
 #define GT9XXX_RST(x)     do{ x ? \
                               HAL_GPIO_WritePin(GT9XXX_RST_GPIO_PORT, GT9XXX_RST_GPIO_PIN, GPIO_PIN_SET) : \
                               HAL_GPIO_WritePin(GT9XXX_RST_GPIO_PORT, GT9XXX_RST_GPIO_PIN, GPIO_PIN_RESET); \
-                          }while(0)       /* ¸´Î»Òý½Å */
+                          }while(0)       /* å¤ä½å¼•è„š */
 
-#define GT9XXX_INT        HAL_GPIO_ReadPin(GT9XXX_INT_GPIO_PORT, GT9XXX_INT_GPIO_PIN)     /* ¶ÁÈ¡×öµÄÒý½Å */
+#define GT9XXX_INT        HAL_GPIO_ReadPin(GT9XXX_INT_GPIO_PORT, GT9XXX_INT_GPIO_PIN)     /* è¯»å–åšçš„å¼•è„š */
 
-/* IIC¶ÁÐ´ÃüÁî */
-#define GT9XXX_CMD_WR       0X28        /* Ð´ÃüÁî */
-#define GT9XXX_CMD_RD       0X29        /* ¶ÁÃüÁî */
+/* IICè¯»å†™å‘½ä»¤ */
+#define GT9XXX_CMD_WR       0X28        /* å†™å‘½ä»¤ */
+#define GT9XXX_CMD_RD       0X29        /* è¯»å‘½ä»¤ */
 
-/* GT9XXX ²¿·Ö¼Ä´æÆ÷¶¨Òå  */
-#define GT9XXX_CTRL_REG     0X8040      /* GT9XXX¿ØÖÆ¼Ä´æÆ÷ */
-#define GT9XXX_CFGS_REG     0X8047      /* GT9XXXÅäÖÃÆðÊ¼µØÖ·¼Ä´æÆ÷ */
-#define GT9XXX_CHECK_REG    0X80FF      /* GT9XXXÐ£ÑéºÍ¼Ä´æÆ÷ */
-#define GT9XXX_PID_REG      0X8140      /* GT9XXX²úÆ·ID¼Ä´æÆ÷ */
+/* GT9XXX éƒ¨åˆ†å¯„å­˜å™¨å®šä¹‰  */
+#define GT9XXX_CTRL_REG     0X8040      /* GT9XXXæŽ§åˆ¶å¯„å­˜å™¨ */
+#define GT9XXX_CFGS_REG     0X8047      /* GT9XXXé…ç½®èµ·å§‹åœ°å€å¯„å­˜å™¨ */
+#define GT9XXX_CHECK_REG    0X80FF      /* GT9XXXæ ¡éªŒå’Œå¯„å­˜å™¨ */
+#define GT9XXX_PID_REG      0X8140      /* GT9XXXäº§å“IDå¯„å­˜å™¨ */
 
-#define GT9XXX_GSTID_REG    0X814E      /* GT9XXXµ±Ç°¼ì²âµ½µÄ´¥ÃþÇé¿ö */
-#define GT9XXX_TP1_REG      0X8150      /* µÚÒ»¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP2_REG      0X8158      /* µÚ¶þ¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP3_REG      0X8160      /* µÚÈý¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP4_REG      0X8168      /* µÚËÄ¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP5_REG      0X8170      /* µÚÎå¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP6_REG      0X8178      /* µÚÁù¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP7_REG      0X8180      /* µÚÆß¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP8_REG      0X8188      /* µÚ°Ë¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP9_REG      0X8190      /* µÚ¾Å¸ö´¥ÃþµãÊý¾ÝµØÖ· */
-#define GT9XXX_TP10_REG     0X8198      /* µÚÊ®¸ö´¥ÃþµãÊý¾ÝµØÖ· */
+#define GT9XXX_GSTID_REG    0X814E      /* GT9XXXå½“å‰æ£€æµ‹åˆ°çš„è§¦æ‘¸æƒ…å†µ */
+#define GT9XXX_TP1_REG      0X8150      /* ç¬¬ä¸€ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP2_REG      0X8158      /* ç¬¬äºŒä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP3_REG      0X8160      /* ç¬¬ä¸‰ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP4_REG      0X8168      /* ç¬¬å››ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP5_REG      0X8170      /* ç¬¬äº”ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP6_REG      0X8178      /* ç¬¬å…­ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP7_REG      0X8180      /* ç¬¬ä¸ƒä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP8_REG      0X8188      /* ç¬¬å…«ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP9_REG      0X8190      /* ç¬¬ä¹ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
+#define GT9XXX_TP10_REG     0X8198      /* ç¬¬åä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€ */
  
 /******************************************************************************************/
-/* º¯ÊýÉùÃ÷ */
+/* å‡½æ•°å£°æ˜Ž */
 
-uint8_t gt9xxx_wr_reg(uint16_t reg,uint8_t *buf,uint8_t len);   /* Ïògt9xxÐ´ÈëÊý¾Ý */
-void gt9xxx_rd_reg(uint16_t reg,uint8_t *buf,uint8_t len);      /* ´Ógt9xx¶ÁÈ¡Êý¾Ý */
-uint8_t gt9xxx_init(void);                                      /* ³õÊ¼»¯gt9xxx´¥ÃþÆÁ */
-uint8_t gt9xxx_scan(uint8_t mode);                              /* É¨Ãè´¥ÃþÆÁ */
+uint8_t gt9xxx_wr_reg(uint16_t reg,uint8_t *buf,uint8_t len);   /* å‘gt9xxå†™å…¥æ•°æ® */
+void gt9xxx_rd_reg(uint16_t reg,uint8_t *buf,uint8_t len);      /* ä»Žgt9xxè¯»å–æ•°æ® */
+uint8_t gt9xxx_init(void);                                      /* åˆå§‹åŒ–gt9xxxè§¦æ‘¸å± */
+uint8_t gt9xxx_scan(uint8_t mode);                              /* æ‰«æè§¦æ‘¸å± */
 
 #endif
 

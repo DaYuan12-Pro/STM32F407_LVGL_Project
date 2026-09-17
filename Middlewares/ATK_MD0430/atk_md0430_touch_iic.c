@@ -1,19 +1,19 @@
 /**
  ****************************************************************************************************
  * @file        atk_md0430_touch_iic.c
- * @author      ����ԭ���Ŷ�(ALIENTEK)
+ * @author      正点原子团队(ALIENTEK)
  * @version     V1.0
  * @date        2022-06-21
- * @brief       ATK-MD0430ģ�鴥��IIC�ӿ���������
- * @license     Copyright (c) 2020-2032, �������������ӿƼ����޹�˾
+ * @brief       ATK-MD0430模块触摸IIC接口驱动代码
+ * @license     Copyright (c) 2020-2032, 广州市星翼电子科技有限公司
  ****************************************************************************************************
  * @attention
  *
- * ʵ��ƽ̨:����ԭ�� ̽���� F407������
- * ������Ƶ:www.yuanzige.com
- * ������̳:www.openedv.com
- * ��˾��ַ:www.alientek.com
- * �����ַ:openedv.taobao.com
+ * 实验平台:正点原子 探索者 F407开发板
+ * 在线视频:www.yuanzige.com
+ * 技术论坛:www.openedv.com
+ * 公司网址:www.alientek.com
+ * 购买地址:openedv.taobao.com
  *
  ****************************************************************************************************
  */
@@ -23,20 +23,20 @@
 
 #if (ATK_MD0430_USING_TOUCH != 0)
 
-/* ����IICͨѶ�Ƕ���������д���� */
+/* 控制IIC通讯是读操作还是写操作 */
 #define ATK_MD0430_TOUCH_IIC_WRITE  0
 #define ATK_MD0430_TOUCH_IIC_READ   1
 
-/* ATK-MD0430����IIC���ݽṹ�� */
+/* ATK-MD0430触摸IIC数据结构体 */
 static struct
 {
-    uint8_t iic_addr;               /* IICͨѶ��ַ */
+    uint8_t iic_addr;               /* IIC通讯地址 */
 } g_atk_md0430_touch_iic_sta = {0};
 
 /**
- * @brief       IIC�ӿ���ʱ���������ڿ���IIC��д�ٶ�
- * @param       ��
- * @retval      ��
+ * @brief       IIC接口延时函数，用于控制IIC读写速度
+ * @param       无
+ * @retval      无
  */
 static inline void atk_md0430_touch_iic_delay(void)
 {
@@ -44,9 +44,9 @@ static inline void atk_md0430_touch_iic_delay(void)
 }
 
 /**
- * @brief       ����IIC��ʼ�ź�
- * @param       ��
- * @retval      ��
+ * @brief       产生IIC起始信号
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_touch_iic_start(void)
 {
@@ -60,9 +60,9 @@ static void atk_md0430_touch_iic_start(void)
 }
 
 /**
- * @brief       ����IICֹͣ�ź�
- * @param       ��
- * @retval      ��
+ * @brief       产生IIC停止信号
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_touch_iic_stop(void)
 {
@@ -75,10 +75,10 @@ static void atk_md0430_touch_iic_stop(void)
 }
 
 /**
- * @brief       �ȴ�IICӦ���ź�
- * @param       ��
- * @retval      0: Ӧ���źŽ��ճɹ�
- *              1: Ӧ���źŽ���ʧ��
+ * @brief       等待IIC应答信号
+ * @param       无
+ * @retval      0: 应答信号接收成功
+ *              1: 应答信号接收失败
  */
 static uint8_t atk_md0430_touch_iic_wait_ack(void)
 {
@@ -109,9 +109,9 @@ static uint8_t atk_md0430_touch_iic_wait_ack(void)
 }
 
 /**
- * @brief       ����ACKӦ���ź�
- * @param       ��
- * @retval      ��
+ * @brief       产生ACK应答信号
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_touch_iic_ack(void)
 {
@@ -126,9 +126,9 @@ static void atk_md0430_touch_iic_ack(void)
 }
 
 /**
- * @brief       ������ACKӦ���ź�
- * @param       ��
- * @retval      ��
+ * @brief       不产生ACK应答信号
+ * @param       无
+ * @retval      无
  */
 static void atk_md0430_touch_iic_nack(void)
 {
@@ -141,9 +141,9 @@ static void atk_md0430_touch_iic_nack(void)
 }
 
 /**
- * @brief       IIC����һ���ֽ�
- * @param       dat: Ҫ���͵�����
- * @retval      ��
+ * @brief       IIC发送一个字节
+ * @param       dat: 要发送的数据
+ * @retval      无
  */
 static void atk_md0430_touch_iic_send_byte(uint8_t dat)
 {
@@ -162,9 +162,9 @@ static void atk_md0430_touch_iic_send_byte(uint8_t dat)
 }
 
 /**
- * @brief       IIC����һ���ֽ�
- * @param       ack: ack=1ʱ������ack; ack=0ʱ������nack
- * @retval      ���յ�������
+ * @brief       IIC接收一个字节
+ * @param       ack: ack=1时，发送ack; ack=0时，发送nack
+ * @retval      接收到的数据
  */
 static uint8_t atk_md0430_touch_iic_recv_byte(uint8_t ack)
 {
@@ -199,28 +199,28 @@ static uint8_t atk_md0430_touch_iic_recv_byte(uint8_t ack)
 }
 
 /**
- * @brief       ��ʼ��IIC�ӿ�
- * @param       ��
- * @retval      ��
+ * @brief       初始化IIC接口
+ * @param       无
+ * @retval      无
  */
 void atk_md0430_touch_iic_init(uint8_t iic_addr)
 {
     GPIO_InitTypeDef gpio_init_struct = {0};
     
-    /* ʹ��SCL��SDA����GPIO��ʱ�� */
+    /* 使能SCL、SDA引脚GPIO的时钟 */
     ATK_MD0430_TOUCH_IIC_SCL_GPIO_CLK_ENABLE();
     ATK_MD0430_TOUCH_IIC_SDA_GPIO_CLK_ENABLE();
     
-    /* ��ʼ��SCL���� */
-    gpio_init_struct.Pin    = ATK_MD0430_TOUCH_IIC_SCL_GPIO_PIN;    /* SCL���� */
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;                  /* ������� */
-    gpio_init_struct.Pull   = GPIO_PULLUP;                          /* ���� */
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;                 /* ���� */
+    /* 初始化SCL引脚 */
+    gpio_init_struct.Pin    = ATK_MD0430_TOUCH_IIC_SCL_GPIO_PIN;    /* SCL引脚 */
+    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;                  /* 推挽输出 */
+    gpio_init_struct.Pull   = GPIO_PULLUP;                          /* 上拉 */
+    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;                 /* 高速 */
     HAL_GPIO_Init(ATK_MD0430_TOUCH_IIC_SCL_GPIO_PORT, &gpio_init_struct);
     
-    /* ��ʼ��SDA���� */
-    gpio_init_struct.Pin    = ATK_MD0430_TOUCH_IIC_SDA_GPIO_PIN;    /* SDA���� */
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_OD;                  /* ��©��� */
+    /* 初始化SDA引脚 */
+    gpio_init_struct.Pin    = ATK_MD0430_TOUCH_IIC_SDA_GPIO_PIN;    /* SDA引脚 */
+    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_OD;                  /* 开漏输出 */
     HAL_GPIO_Init(ATK_MD0430_TOUCH_IIC_SDA_GPIO_PORT, &gpio_init_struct);
     
     atk_md0430_touch_iic_stop();
@@ -229,12 +229,12 @@ void atk_md0430_touch_iic_init(uint8_t iic_addr)
 }
 
 /**
- * @brief       дATK-MD0430ģ�鴥���Ĵ���
- * @param       reg: ��д�Ĵ�����ַ
- *              buf: ��д�������
- *              len: ��д�����ݵĳ���
- * @retval      ATK_MD0430_TOUCH_IIC_EOK  : дATK-MD0430ģ�鴥���Ĵ����ɹ�
- *              ATK_MD0430_TOUCH_IIC_ERROR: дATK-MD0430ģ�鴥���Ĵ���ʧ��
+ * @brief       写ATK-MD0430模块触摸寄存器
+ * @param       reg: 待写寄存器地址
+ *              buf: 待写入的数据
+ *              len: 待写入数据的长度
+ * @retval      ATK_MD0430_TOUCH_IIC_EOK  : 写ATK-MD0430模块触摸寄存器成功
+ *              ATK_MD0430_TOUCH_IIC_ERROR: 写ATK-MD0430模块触摸寄存器失败
  */
 uint8_t atk_md0430_touch_iic_write_reg(uint16_t reg, uint8_t *buf, uint8_t len)
 {
@@ -270,12 +270,12 @@ uint8_t atk_md0430_touch_iic_write_reg(uint16_t reg, uint8_t *buf, uint8_t len)
 }
 
 /**
- * @brief       ��ATK-MD0430ģ�鴥���Ĵ���
- * @param       reg: �����Ĵ�����ַ
- *              buf: ��ȡ������
- *              len: ����ȡ���ݵĳ���
- * @retval      ATK_MD0430_TOUCH_IIC_EOK  : ��ATK-MD0430ģ�鴥���Ĵ����ɹ�
- *              ATK_MD0430_TOUCH_IIC_ERROR: ��ATK-MD0430ģ�鴥���Ĵ���ʧ��
+ * @brief       读ATK-MD0430模块触摸寄存器
+ * @param       reg: 待读寄存器地址
+ *              buf: 读取的数据
+ *              len: 待读取数据的长度
+ * @retval      ATK_MD0430_TOUCH_IIC_EOK  : 读ATK-MD0430模块触摸寄存器成功
+ *              ATK_MD0430_TOUCH_IIC_ERROR: 读ATK-MD0430模块触摸寄存器失败
  */
 void atk_md0430_touch_iic_read_reg(uint16_t reg, uint8_t *buf, uint8_t len)
 {

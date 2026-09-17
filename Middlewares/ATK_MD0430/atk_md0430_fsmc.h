@@ -1,19 +1,19 @@
 /**
  ****************************************************************************************************
  * @file        atk_md0430_fsmc.h
- * @author      ����ԭ���Ŷ�(ALIENTEK)
+ * @author      正点原子团队(ALIENTEK)
  * @version     V1.0
  * @date        2022-06-21
- * @brief       ATK-MD0430ģ��FSMC�ӿ���������
- * @license     Copyright (c) 2020-2032, �������������ӿƼ����޹�˾
+ * @brief       ATK-MD0430模块FSMC接口驱动代码
+ * @license     Copyright (c) 2020-2032, 广州市星翼电子科技有限公司
  ****************************************************************************************************
  * @attention
  *
- * ʵ��ƽ̨:����ԭ�� ̽���� F407������
- * ������Ƶ:www.yuanzige.com
- * ������̳:www.openedv.com
- * ��˾��ַ:www.alientek.com
- * �����ַ:openedv.taobao.com
+ * 实验平台:正点原子 探索者 F407开发板
+ * 在线视频:www.yuanzige.com
+ * 技术论坛:www.openedv.com
+ * 公司网址:www.alientek.com
+ * 购买地址:openedv.taobao.com
  *
  ****************************************************************************************************
  */
@@ -23,25 +23,25 @@
 
 #include "sys.h"
 
-/* ATK-MD0430ģ��FSMC�ӿڶ��� */
-#define ATK_MD0430_FSMC_BANK                    FSMC_NORSRAM_BANK4                          /* ATK-MD0430ģ������FSMC��Bank */
+/* ATK-MD0430模块FSMC接口定义 */
+#define ATK_MD0430_FSMC_BANK                    FSMC_NORSRAM_BANK4                          /* ATK-MD0430模块所接FSMC的Bank */
 #define ATK_MD0430_FSMC_BANK_ADDR               (0x6C000000)
 #define ATK_MD0430_FSMC_REG_SEL                 (6)
-#define ATK_MD0430_FSMC_READ_AST                0x0F                                        /* ��ʱ��ĵ�ַ����ʱ�䣬��λ��HCLK */
-#define ATK_MD0430_FSMC_READ_DST                0x3C                                        /* ��ʱ������ݽ���ʱ�䣬��λ��HCLK */
-#define ATK_MD0430_FSMC_WRITE_AST               0x02                                        /* дʱ��ĵ�ַ����ʱ�䣬��λ��HCLK */
-#define ATK_MD0430_FSMC_WRITE_DST               0x02                                        /* дʱ������ݽ���ʱ�䣬��λ��HCLK */
-#define ATK_MD0430_FSMC_CLK_ENABLE()            do{ __HAL_RCC_FSMC_CLK_ENABLE(); }while(0)  /* ATK-MD0430ģ������FSMCʱ��ʹ�� */
+#define ATK_MD0430_FSMC_READ_AST                0x0F                                        /* 读时序的地址建立时间，单位：HCLK */
+#define ATK_MD0430_FSMC_READ_DST                0x3C                                        /* 读时序的数据建立时间，单位：HCLK */
+#define ATK_MD0430_FSMC_WRITE_AST               0x02                                        /* 写时序的地址建立时间，单位：HCLK */
+#define ATK_MD0430_FSMC_WRITE_DST               0x02                                        /* 写时序的数据建立时间，单位：HCLK */
+#define ATK_MD0430_FSMC_CLK_ENABLE()            do{ __HAL_RCC_FSMC_CLK_ENABLE(); }while(0)  /* ATK-MD0430模块所接FSMC时钟使能 */
 
-/* ATK-MD0430ģ��FSMC�ӿڶ�д������ݵ�ַ */
+/* ATK-MD0430模块FSMC接口读写命令、数据地址 */
 #define ATK_MD0430_FSMC_CMD_ADDR                (ATK_MD0430_FSMC_BANK_ADDR | (((1U << ATK_MD0430_FSMC_REG_SEL) - 1) << 1))
 #define ATK_MD0430_FSMC_DAT_ADDR                (ATK_MD0430_FSMC_BANK_ADDR | ((1U << ATK_MD0430_FSMC_REG_SEL) << 1))
 
-/* ATK-MD0430ģ��FSMC�ӿڶ�д������� */
+/* ATK-MD0430模块FSMC接口读写命令、数据 */
 #define ATK_MD0430_FSMC_CMD_REG                 (*(volatile uint16_t *)ATK_MD0430_FSMC_CMD_ADDR)
 #define ATK_MD0430_FSMC_DAT_REG                 (*(volatile uint16_t *)ATK_MD0430_FSMC_DAT_ADDR)
 
-/* ���Ŷ��� */
+/* 引脚定义 */
 #define ATK_MD0430_FSMC_RS_GPIO_PORT            GPIOF
 #define ATK_MD0430_FSMC_RS_GPIO_PIN             GPIO_PIN_12
 #define ATK_MD0430_FSMC_RS_GPIO_AF              GPIO_AF12_FSMC
@@ -123,22 +123,22 @@
 #define ATK_MD0430_FSMC_D15_GPIO_AF             GPIO_AF12_FSMC
 #define ATK_MD0430_FSMC_D15_GPIO_CLK_ENABLE()   do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)
 
-/* �������� */
-void atk_md0430_fsmc_init(void);                                                            /* ATK-MD0430ģ��FSMC�ӿڳ�ʼ�� */
-static inline void atk_md0430_fsmc_write_cmd(volatile uint16_t cmd)                         /* ATK-MD0430ģ��ͨ��FSMC�ӿ�д���� */
+/* 操作函数 */
+void atk_md0430_fsmc_init(void);                                                            /* ATK-MD0430模块FSMC接口初始化 */
+static inline void atk_md0430_fsmc_write_cmd(volatile uint16_t cmd)                         /* ATK-MD0430模块通过FSMC接口写命令 */
 {
     ATK_MD0430_FSMC_CMD_REG = cmd;
 }
-static inline void atk_md0430_fsmc_write_dat(volatile uint16_t dat)                         /* ATK-MD0430ģ��ͨ��FSMC�ӿ�д���� */
+static inline void atk_md0430_fsmc_write_dat(volatile uint16_t dat)                         /* ATK-MD0430模块通过FSMC接口写数据 */
 {
     ATK_MD0430_FSMC_DAT_REG = dat;
 }
-static inline void atk_md0430_fsmc_write_reg(volatile uint16_t reg, volatile uint16_t dat)  /* ATK-MD0430ģ��ͨ��FSMC�ӿ�д�Ĵ��� */
+static inline void atk_md0430_fsmc_write_reg(volatile uint16_t reg, volatile uint16_t dat)  /* ATK-MD0430模块通过FSMC接口写寄存器 */
 {
     ATK_MD0430_FSMC_CMD_REG = reg;
     ATK_MD0430_FSMC_DAT_REG = dat;
 }
-static inline uint16_t atk_md0430_fsmc_read_dat(void)                                       /* ATK-MD0430ģ��ͨ��FSMC�ӿڶ����� */
+static inline uint16_t atk_md0430_fsmc_read_dat(void)                                       /* ATK-MD0430模块通过FSMC接口读数据 */
 {
     uint16_t dat;
     

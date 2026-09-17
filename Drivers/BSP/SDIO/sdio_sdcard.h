@@ -1,23 +1,23 @@
 /**
  ****************************************************************************************************
  * @file        sdio_sdcard.h
- * @author      ÕıµãÔ­×ÓÍÅ¶Ó(ALIENTEK)
+ * @author      æ­£ç‚¹åŸå­å›¢é˜Ÿ(ALIENTEK)
  * @version     V1.0
  * @date        2021-11-05
- * @brief       SD¿¨ Çı¶¯´úÂë
- * @license     Copyright (c) 2020-2032, ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾
+ * @brief       SDå¡ é©±åŠ¨ä»£ç 
+ * @license     Copyright (c) 2020-2032, å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸
  ****************************************************************************************************
  * @attention
  *
- * ÊµÑéÆ½Ì¨:ÕıµãÔ­×Ó STM32F407¿ª·¢°å
- * ÔÚÏßÊÓÆµ:www.yuanzige.com
- * ¼¼ÊõÂÛÌ³:www.openedv.com
- * ¹«Ë¾ÍøÖ·:www.alientek.com
- * ¹ºÂòµØÖ·:openedv.taobao.com
+ * å®éªŒå¹³å°:æ­£ç‚¹åŸå­ STM32F407å¼€å‘æ¿
+ * åœ¨çº¿è§†é¢‘:www.yuanzige.com
+ * æŠ€æœ¯è®ºå›:www.openedv.com
+ * å…¬å¸ç½‘å€:www.alientek.com
+ * è´­ä¹°åœ°å€:openedv.taobao.com
  *
- * ĞŞ¸ÄËµÃ÷
+ * ä¿®æ”¹è¯´æ˜
  * V1.0 20211105
- * µÚÒ»´Î·¢²¼
+ * ç¬¬ä¸€æ¬¡å‘å¸ƒ
  *
  ****************************************************************************************************
  */
@@ -29,41 +29,41 @@
 
 
 /******************************************************************************************/
-/* SDIOµÄĞÅºÅÏß: SD_D0 ~ SD_D3/SD_CLK/SD_CMD Òı½Å ¶¨Òå 
- * Èç¹ûÄãÊ¹ÓÃÁËÆäËûÒı½Å×öSDIOµÄĞÅºÅÏß,ĞŞ¸ÄÕâÀïĞ´¶¨Òå¼´¿ÉÊÊÅä.
+/* SDIOçš„ä¿¡å·çº¿: SD_D0 ~ SD_D3/SD_CLK/SD_CMD å¼•è„š å®šä¹‰ 
+ * å¦‚æœä½ ä½¿ç”¨äº†å…¶ä»–å¼•è„šåšSDIOçš„ä¿¡å·çº¿,ä¿®æ”¹è¿™é‡Œå†™å®šä¹‰å³å¯é€‚é….
  */
 
 #define SD_D0_GPIO_PORT                GPIOC
 #define SD_D0_GPIO_PIN                 GPIO_PIN_8
-#define SD_D0_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_D0_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define SD_D1_GPIO_PORT                GPIOC
 #define SD_D1_GPIO_PIN                 GPIO_PIN_9
-#define SD_D1_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_D1_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define SD_D2_GPIO_PORT                GPIOC
 #define SD_D2_GPIO_PIN                 GPIO_PIN_10
-#define SD_D2_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_D2_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define SD_D3_GPIO_PORT                GPIOC
 #define SD_D3_GPIO_PIN                 GPIO_PIN_11
-#define SD_D3_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_D3_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define SD_CLK_GPIO_PORT               GPIOC
 #define SD_CLK_GPIO_PIN                GPIO_PIN_12
-#define SD_CLK_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_CLK_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 #define SD_CMD_GPIO_PORT               GPIOD
 #define SD_CMD_GPIO_PIN                GPIO_PIN_2
-#define SD_CMD_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)    /* ËùÔÚIO¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define SD_CMD_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)    /* æ‰€åœ¨IOå£æ—¶é’Ÿä½¿èƒ½ */
 
 /******************************************************************************************/
 
-#define SD_TIMEOUT             ((uint32_t)100000000)      /* ³¬Ê±Ê±¼ä */
+#define SD_TIMEOUT             ((uint32_t)100000000)      /* è¶…æ—¶æ—¶é—´ */
 #define SD_TRANSFER_OK         ((uint8_t)0x00)
 #define SD_TRANSFER_BUSY       ((uint8_t)0x01) 
 
-/* ¸ù¾İ SD_HandleTypeDef ¶¨ÒåµÄºê£¬ÓÃÓÚ¿ìËÙ¼ÆËãÈİÁ¿ */
+/* æ ¹æ® SD_HandleTypeDef å®šä¹‰çš„å®ï¼Œç”¨äºå¿«é€Ÿè®¡ç®—å®¹é‡ */
 #define SD_TOTAL_SIZE_BYTE(__Handle__)  (((uint64_t)((__Handle__)->SdCard.LogBlockNbr)*((__Handle__)->SdCard.LogBlockSize))>>0)
 #define SD_TOTAL_SIZE_KB(__Handle__)    (((uint64_t)((__Handle__)->SdCard.LogBlockNbr)*((__Handle__)->SdCard.LogBlockSize))>>10)
 #define SD_TOTAL_SIZE_MB(__Handle__)    (((uint64_t)((__Handle__)->SdCard.LogBlockNbr)*((__Handle__)->SdCard.LogBlockSize))>>20)
@@ -71,8 +71,8 @@
 
 /******************************************************************************************/
 
-extern SD_HandleTypeDef        g_sdcard_handle;         /* SD¿¨¾ä±ú */
-extern HAL_SD_CardInfoTypeDef  g_sd_card_info_handle;   /* SD¿¨ĞÅÏ¢½á¹¹Ìå */
+extern SD_HandleTypeDef        g_sdcard_handle;         /* SDå¡å¥æŸ„ */
+extern HAL_SD_CardInfoTypeDef  g_sd_card_info_handle;   /* SDå¡ä¿¡æ¯ç»“æ„ä½“ */
 
 uint8_t sd_init(void);
 uint8_t get_sd_card_info(HAL_SD_CardInfoTypeDef *cardinfo);

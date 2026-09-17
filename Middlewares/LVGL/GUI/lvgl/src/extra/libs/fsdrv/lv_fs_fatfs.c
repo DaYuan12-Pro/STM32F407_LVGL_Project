@@ -11,7 +11,7 @@
 #if LV_USE_FS_FATFS
 #include "ff.h"
 
-/* Ìí¼ÓÏà¹ØÍ·ÎÄ¼ş */
+/* æ·»åŠ ç›¸å…³å¤´æ–‡ä»¶ */
 #include <stdio.h>
 #include "./BSP/LED/led.h"
 #include "./BSP/LCD/lcd.h"
@@ -95,9 +95,9 @@ void lv_fs_fatfs_init(void)
  **********************/
 
 /**
- * @brief       ³õÊ¼»¯´æ´¢Éè±¸ºÍÎÄ¼şÏµÍ³
- * @param       ÎŞ
- * @retval      ÎŞ
+ * @brief       åˆå§‹åŒ–å­˜å‚¨è®¾å¤‡å’Œæ–‡ä»¶ç³»ç»Ÿ
+ * @param       æ— 
+ * @retval      æ— 
  */
 static void fs_init(void)
 {
@@ -105,9 +105,9 @@ static void fs_init(void)
      *Better to do it in your code to keep this library untouched for easy updating*/
     uint8_t res;
     
-    /* ³õÊ¼»¯ SD ¿¨ºÍ FatFS ±¾Éí
-     * ×îºÃÔÚ×Ô¼ºµÄ¿âÖĞÍê³É£¬Ò»±éÒÔºó¸üĞÂ */
-    while (sd_init())               /* ³õÊ¼»¯ SD ¿¨ */
+    /* åˆå§‹åŒ– SD å¡å’Œ FatFS æœ¬èº«
+     * æœ€å¥½åœ¨è‡ªå·±çš„åº“ä¸­å®Œæˆï¼Œä¸€éä»¥åæ›´æ–° */
+    while (sd_init())               /* åˆå§‹åŒ– SD å¡ */
     {
         lcd_show_string(10, 10, 200, 24, 24, "SD Card Error!", RED);
         printf("SD Card Error, Please Check!\r\n");
@@ -117,8 +117,8 @@ static void fs_init(void)
     
     LED0(0);
     
-    exfuns_init();                  /* Îª fatfs Ïà¹Ø±äÁ¿ÉêÇëÄÚ´æ */
-    res = f_mount(fs[0], "0:", 1);  /* ¹ÒÔØ SD ¿¨ */
+    exfuns_init();                  /* ä¸º fatfs ç›¸å…³å˜é‡ç”³è¯·å†…å­˜ */
+    res = f_mount(fs[0], "0:", 1);  /* æŒ‚è½½ SD å¡ */
     
     if (0 != res)
     {
@@ -130,11 +130,11 @@ static void fs_init(void)
 }
 
 /**
- * @brief ´ò¿ªÒ»¸öÎÄ¼ş
- * @param drv£ºÖ¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param path£ºÒÔÇı¶¯·û¿ªÍ·µÄÎÄ¼şÂ·¾¶(ÀıÈçS:/folder/file.txt)
+ * @brief æ‰“å¼€ä¸€ä¸ªæ–‡ä»¶
+ * @param drvï¼šæŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param pathï¼šä»¥é©±åŠ¨ç¬¦å¼€å¤´çš„æ–‡ä»¶è·¯å¾„(ä¾‹å¦‚S:/folder/file.txt)
  * @param mode: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
- * @retval ·ÇNULL: ³É¹¦, NULLP£ºÊ§°Ü
+ * @retval éNULL: æˆåŠŸ, NULLPï¼šå¤±è´¥
  */
 static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
@@ -159,10 +159,10 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
  /**
- * @brief  ¹Ø±ÕÒÑ´ò¿ªµÄÎÄ¼ş
- * @param  drv£ºÖ¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  file_p£ºÖ¸Ïòfile_t±äÁ¿µÄÖ¸Õë¡£(Óëlv_ufs_open´ò¿ª)
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡À´×Ôlv_fs_res_t enumµÄÈÎºÎ´íÎó
+ * @brief  å…³é—­å·²æ‰“å¼€çš„æ–‡ä»¶
+ * @param  drvï¼šæŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  file_pï¼šæŒ‡å‘file_tå˜é‡çš„æŒ‡é’ˆã€‚(ä¸lv_ufs_openæ‰“å¼€)
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–æ¥è‡ªlv_fs_res_t enumçš„ä»»ä½•é”™è¯¯
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -173,13 +173,13 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * @brief ´Ó´ò¿ªµÄÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ
- * @param drv£ºÖ¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param file_p£ºÖ¸Ïòfile_t±äÁ¿µÄÖ¸Õë¡£
- * @param buf£ºÖ¸Õë£¬Ö¸Ïò´æ´¢¶ÁÊı¾İµÄÄÚ´æ¿é
- * @param btr£ºÒª¶ÁÈ¡µÄ×Ö½ÚÊı
- * @param br£ºÊµ¼Ê¶Á×Ö½ÚÊı(×Ö½Ú¶Á)
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief ä»æ‰“å¼€çš„æ–‡ä»¶ä¸­è¯»å–æ•°æ®
+ * @param drvï¼šæŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param file_pï¼šæŒ‡å‘file_tå˜é‡çš„æŒ‡é’ˆã€‚
+ * @param bufï¼šæŒ‡é’ˆï¼ŒæŒ‡å‘å­˜å‚¨è¯»æ•°æ®çš„å†…å­˜å—
+ * @param btrï¼šè¦è¯»å–çš„å­—èŠ‚æ•°
+ * @param brï¼šå®é™…è¯»å­—èŠ‚æ•°(å­—èŠ‚è¯»)
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -190,13 +190,13 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * @brief  Ğ´ÈëÎÄ¼ş
- * @param  drv£º   Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  file_p£ºÖ¸Ïòfile_t±äÁ¿µÄÖ¸Õë
- * @param  buf£º   Ö¸Õë£¬Ö¸ÏòÒ»¸ö´øÓĞÒªĞ´Èë×Ö½ÚµÄ»º³åÇø
- * @param  btw£º   ÒªĞ´µÄbtr×Ö½ÚÊı
- * @param  br£º    Êµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı(ÒÑĞ´ÈëµÄ×Ö½ÚÊı)¡£Èç¹ûÎ´Ê¹ÓÃNULL¡£
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief  å†™å…¥æ–‡ä»¶
+ * @param  drvï¼š   æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  file_pï¼šæŒ‡å‘file_tå˜é‡çš„æŒ‡é’ˆ
+ * @param  bufï¼š   æŒ‡é’ˆï¼ŒæŒ‡å‘ä¸€ä¸ªå¸¦æœ‰è¦å†™å…¥å­—èŠ‚çš„ç¼“å†²åŒº
+ * @param  btwï¼š   è¦å†™çš„btrå­—èŠ‚æ•°
+ * @param  brï¼š    å®é™…å†™å…¥çš„å­—èŠ‚æ•°(å·²å†™å…¥çš„å­—èŠ‚æ•°)ã€‚å¦‚æœæœªä½¿ç”¨NULLã€‚
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw)
 {
@@ -207,11 +207,11 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * @brief  ÉèÖÃ¶ÁĞ´Ö¸Õë¡£Èç¹ûÓĞ±ØÒª£¬Ò²¿ÉÒÔÀ©Õ¹ÎÄ¼ş´óĞ¡¡£
- * @param  drv£º   Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  file_p£ºÖ¸Ïòfile_t±äÁ¿µÄÖ¸Õë¡£(Ê¹ÓÃlv_ufs_open´ò¿ª)
- * @param  pos£º   ¶ÁĞ´Ö¸ÕëµÄĞÂÎ»ÖÃ
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief  è®¾ç½®è¯»å†™æŒ‡é’ˆã€‚å¦‚æœæœ‰å¿…è¦ï¼Œä¹Ÿå¯ä»¥æ‰©å±•æ–‡ä»¶å¤§å°ã€‚
+ * @param  drvï¼š   æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  file_pï¼šæŒ‡å‘file_tå˜é‡çš„æŒ‡é’ˆã€‚(ä½¿ç”¨lv_ufs_openæ‰“å¼€)
+ * @param  posï¼š   è¯»å†™æŒ‡é’ˆçš„æ–°ä½ç½®
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -233,11 +233,11 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * @brief  ·µ»Ø¶ÁĞ´Ö¸ÕëµÄÎ»ÖÃ
- * @param  drv£º   Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  file_p£ºÖ¸Ïòfile_t±äÁ¿µÄÖ¸Õë
- * @param  pos_p£º ÓÃÓÚ´æ´¢½á¹ûµÄÖ¸Õë
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief  è¿”å›è¯»å†™æŒ‡é’ˆçš„ä½ç½®
+ * @param  drvï¼š   æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  file_pï¼šæŒ‡å‘file_tå˜é‡çš„æŒ‡é’ˆ
+ * @param  pos_pï¼š ç”¨äºå­˜å‚¨ç»“æœçš„æŒ‡é’ˆ
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {
@@ -247,11 +247,11 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 }
 
 /**
- * @brief  ´ò¿ªÄ¿Â¼
- * @param  drv£º    Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  rddir_p£ºÖ¸Ïò'lv_fs_dir_t'±äÁ¿µÄÖ¸Õë
- * @param  path£º   Ä¿Â¼Â·¾¶
- * @retval Ö¸Ïò³õÊ¼»¯µÄ'DIR'±äÁ¿µÄÖ¸Õë
+ * @brief  æ‰“å¼€ç›®å½•
+ * @param  drvï¼š    æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  rddir_pï¼šæŒ‡å‘'lv_fs_dir_t'å˜é‡çš„æŒ‡é’ˆ
+ * @param  pathï¼š   ç›®å½•è·¯å¾„
+ * @retval æŒ‡å‘åˆå§‹åŒ–çš„'DIR'å˜é‡çš„æŒ‡é’ˆ
  */
 static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 {
@@ -268,11 +268,11 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 }
 
 /**
- * @brief  ´ÓÒ»¸öÄ¿Â¼ÖĞ¶ÁÈ¡ÏÂÒ»¸öÎÄ¼şÃû
- * @param  drv£º    Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  rddir_p£ºÖ¸Ïò³õÊ¼»¯µÄ¡°lv_fs_dir_t¡±±äÁ¿µÄÖ¸Õë
- * @param  fn£º     Ö¸Ïò´æ·ÅÎÄ¼şÃûµÄ»º³åÇøµÄÖ¸Õë
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief  ä»ä¸€ä¸ªç›®å½•ä¸­è¯»å–ä¸‹ä¸€ä¸ªæ–‡ä»¶å
+ * @param  drvï¼š    æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  rddir_pï¼šæŒ‡å‘åˆå§‹åŒ–çš„â€œlv_fs_dir_tâ€å˜é‡çš„æŒ‡é’ˆ
+ * @param  fnï¼š     æŒ‡å‘å­˜æ”¾æ–‡ä»¶åçš„ç¼“å†²åŒºçš„æŒ‡é’ˆ
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn)
 {
@@ -297,10 +297,10 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn)
 }
 
 /**
- * @brief  ¹Ø±ÕÄ¿Â¼¶ÁÈ¡
- * @param  drv£º    Ö¸Ïò¸Ãº¯ÊıËùÊôµÄÇı¶¯³ÌĞò
- * @param  rddir_p£ºÖ¸Ïò³õÊ¼»¯µÄ¡°lv_fs_dir_t¡±±äÁ¿µÄÖ¸Õë
- * @retval LV_FS_RES_OK:Ã»ÓĞ´íÎó£¬ÎÄ¼ş±»¶ÁÈ¡ÈÎºÎ´íÎóÀ´×Ôlv_fs_res_t enum
+ * @brief  å…³é—­ç›®å½•è¯»å–
+ * @param  drvï¼š    æŒ‡å‘è¯¥å‡½æ•°æ‰€å±çš„é©±åŠ¨ç¨‹åº
+ * @param  rddir_pï¼šæŒ‡å‘åˆå§‹åŒ–çš„â€œlv_fs_dir_tâ€å˜é‡çš„æŒ‡é’ˆ
+ * @retval LV_FS_RES_OK:æ²¡æœ‰é”™è¯¯ï¼Œæ–‡ä»¶è¢«è¯»å–ä»»ä½•é”™è¯¯æ¥è‡ªlv_fs_res_t enum
  */
 static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p)
 {
